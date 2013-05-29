@@ -4,9 +4,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,8 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
-
-
 
 public class ServerInterface implements ActionListener {
 	private final static int FRAME_WIDTH = 500;
@@ -32,8 +29,10 @@ public class ServerInterface implements ActionListener {
 	private final static String FRQ_STRING = "Frequently Update";
 	private final static String DEAD_STRING = "Dead Reckoning";
 
+	private static HashMap<Integer, Socket> sockMap;
 	private int sharedMode = 0;
-	private int portNum = 0;
+	private int portNum = 35000;
+	private static int sockID = 0;
 	private int stopFlag = 0;
 	private static int userNum = 0;
 	private JFrame frame;
@@ -162,7 +161,7 @@ public class ServerInterface implements ActionListener {
 
 		portLabel = new JLabel("Port Num :");
 		portLabel.setPreferredSize(new Dimension(60, 30));
-		portTextField = new JTextField("0");
+		portTextField = new JTextField(Integer.toString(portNum));
 		portTextField.setHorizontalAlignment(JTextField.CENTER);
 		portTextField.setPreferredSize(new Dimension(100, 20));
 		portTextField.addActionListener(this);
@@ -182,21 +181,19 @@ public class ServerInterface implements ActionListener {
 	}
 
 	private void listen() {
-		try {
-			ServerSocket server = new ServerSocket(this.getPortNum());
-			System.out.println("Listen port: " + this.getPortNum() );
-			
-			while(stopFlag == FALSE) {
-				Socket sock = server.accept();
-				ServerThread thread = new ServerThread(sock);
-				thread.start();
+		AcceptThread acceptThread = new AcceptThread(this.getPortNum());
+		acceptThread.start();
+		while(true) {
+			Integer intID = new Integer(sockID);
+			if(getSockMap().containsKey(intID)){
+				System.out.println("Thread Acceptance OK");
+				CommThread communicationThread = new CommThread(getSockMap().get(intID));
+				communicationThread.start();
+				userTextField.setText(Integer.toString(++userNum));
+				sockID++;
+				System.out.println("Thread Communcation OK");
 			}
-			
-			server.close();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-
 	}
 
 	public void actionPerformed(ActionEvent event){
@@ -220,12 +217,10 @@ public class ServerInterface implements ActionListener {
 		else if(source == listenBtn) {
 			if(listenBtn.getText().compareTo("Listen") == 0) {
 				listenBtn.setText("Stop");
-				stopFlag = FALSE;
-				this.listen();
+				
 			}
 			else if(listenBtn.getText().compareTo("Stop") == 0) {
 				listenBtn.setText("Listen");
-				stopFlag = TRUE;
 			}
 
 		}
@@ -247,19 +242,26 @@ public class ServerInterface implements ActionListener {
 		this.portNum = portNum;
 	}
 
-	public static void incUserNum() {
-		userNum++;
-		userTextField.setText(Integer.toString(userNum));
+	public static HashMap<Integer, Socket> getSockMap() {
+		if(sockMap == null) {
+			sockMap = new HashMap<Integer, Socket>();
+		}
+
+		return sockMap;
+	}
+	
+	public static int getSockID() {
+		return sockID;
 	}
 
-	public static void decUserNum() {
-		userNum--;
-		userTextField.setText(Integer.toString(userNum));
+	public static void setSockID(int sockID) {
+		ServerInterface.sockID = sockID;
 	}
 
 	public static void main(String[] args){
 		ServerInterface serverProgram = new ServerInterface();
 		serverProgram.drawWindow();
+		serverProgram.listen();
 	}
 
 }
