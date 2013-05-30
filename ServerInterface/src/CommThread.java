@@ -2,21 +2,19 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
 
 public class CommThread extends Thread {
+	private int id;
 	private Socket sock;
-
-	public CommThread(Socket sock) {
-		System.out.println("Communication Thread Create, Socket: " + sock);
+	
+	public CommThread(int id, Socket sock) {
+		this.id = id;
 		this.sock = sock;
 	}
 
 	public void run() {
 		System.out.println("Communication Thread Run!!");
-		InetAddress inetaddr = sock.getInetAddress();
-		System.out.println("IP: " + inetaddr.getHostAddress() + " Connected ");
 		try 
 		{
 			BufferedReader in = new BufferedReader( new InputStreamReader( sock.getInputStream() ) );
@@ -30,6 +28,7 @@ public class CommThread extends Thread {
 				out.flush();
 			}
 			
+			ServerInterface.getSocketMap().remove(new Integer(id));
 			in.close();
 			out.close();
 			sock.close();
