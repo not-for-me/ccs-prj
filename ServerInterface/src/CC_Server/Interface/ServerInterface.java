@@ -1,5 +1,8 @@
 package CC_Server.Interface;
 
+import CC_Server.Model.SSM.DeadReckoning;
+import CC_Server.Model.SSM.FrequentUpdate;
+import CC_Server.Model.SSM.AbsMethod.AbsoluteConsistency;
 import CC_Server.GUI.WindowManager;
 import CC_Server.Model.UserConnInfo;
 
@@ -12,6 +15,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class ServerInterface {
 	public final static int ABS_MODE = 1;
@@ -22,7 +27,7 @@ public class ServerInterface {
 
 	private static ServerInterface instance = new ServerInterface();
 	private static ArrayList<UserConnInfo> userConnInfoList = new ArrayList<UserConnInfo>();
-	
+	private static Queue<String> jobQueue = new LinkedList<String>();
 	private int sharedMode = 0;
 	private int port = 0;
 	private int userNum = 0;
@@ -40,7 +45,10 @@ public class ServerInterface {
 	public static ArrayList<UserConnInfo> getUserConnInfoList() {
 		return userConnInfoList;
 	}
-
+	public static Queue<String> getJobQueue() {
+		return jobQueue;
+	}
+	
 	private void listen() {
 		ServerSocket server;
 
@@ -78,15 +86,15 @@ public class ServerInterface {
 		switch(sharedMode){
 		case ABS_MODE:
 			System.out.println("Here is Absolute Consistency Mode!");
-			goAbsoluteMode();
+			AbsoluteConsistency absMode = new AbsoluteConsistency();
 			break;
 		case FRQ_MODE:
 			System.out.println("Here is Frequently State Update Mode!");
-			goFrequentUpdateMode();
+			FrequentUpdate frqMode = new FrequentUpdate();
 			break;
 		case DEAD_MODE:
 			System.out.println("Here is Dead Reckoning Mode!");
-			goDeadReckoningMode();
+			DeadReckoning deadMode = new DeadReckoning();
 			break;
 		default:
 			break;
@@ -160,7 +168,7 @@ public class ServerInterface {
 		while(ServerInterface.getInstance().getStartFlag() == FALSE) {}
 		ServerInterface.getInstance().start();
 		
-		// Initializatoin and ReDo ???
+		// Initialization and ReDo ???
 	}
 
 }

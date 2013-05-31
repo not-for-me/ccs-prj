@@ -1,7 +1,8 @@
 package CC_Client.Interface;
 
+import CC_Client.GUI.BallMover;
 import CC_Client.GUI.Component.LoginWindow;
-import CC_Client.Model.Method.*;
+import CC_Client.Model.SSM.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -129,6 +130,7 @@ public class ClientInterface {
 	public static void main(String[] args) {
 		ClientInterface.getInstance().connectServer();
 		ClientInterface.getInstance().deceiveSharedStateMethod();
-
+		BallMover ballMover = new BallMover();
+		ballMover.ballWindow();
 	}
 }

@@ -12,7 +12,7 @@ public class BallMover {
 	final static int DELAY = 10; // Milliseconds between timer ticks
 	final static String FRAME_TITLE = "Object Trajectory Window";
 
-	private void ballWindow() {
+	public void ballWindow() {
 		/*
 		while(true) {
 			try {Thread.sleep(DELAY);} catch (InterruptedException e) { }
@@ -33,7 +33,7 @@ public class BallMover {
 
 		class TimerListener implements ActionListener{
 			public void actionPerformed(ActionEvent event){
-				ball.move();
+				ball.move(1);
 				ball.repaint();
 			}
 		}

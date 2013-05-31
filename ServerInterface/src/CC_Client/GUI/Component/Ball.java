@@ -5,22 +5,23 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
+import CC_Server.Model.SSM.AbsMethod.MovingBallAlgorithm;
+
 public class Ball extends JPanel implements KeyListener{
-	private static final long serialVersionUID = 2540605979276383444L;
-	private int velocity_X;
-	private int velocity_Y;
+	private int vel_x;
+	private int vel_y;
+	private int acc_x;
+	private int acc_y;
 	private int diameter;
-	boolean pressed_LeftKey = false;
-	boolean pressed_RightKey = false;
-	boolean pressed_UpKey = false;
-	boolean pressed_DownKey = false;
 	Color color;
 	
 	public Ball( ) {
-		velocity_X = 0;
-		velocity_Y = 0;
+		vel_x = 0;
+		vel_y = 0;
+		acc_x = 0;
+		acc_y = 0;
 		color = Color.magenta;
-		diameter = 10;
+		diameter = 5;
 	}
 	
 	protected void paintComponent(Graphics g) {
@@ -29,20 +30,26 @@ public class Ball extends JPanel implements KeyListener{
 		g.fillOval(0, 0, diameter, diameter);
 	}
 	
-	public void move() {
-		int x = getX();
-		int y = getY();
+	public void move(int time) {
+		MovingBallAlgorithm alg = new MovingBallAlgorithm();
+		int pos_x = getX();
+		int pos_y = getY();
+		
+		int new_pos_x = alg.secondOrderPolynomial(time, pos_x, vel_x, acc_x);
+		int new_pos_y = alg.secondOrderPolynomial(time, pos_y, vel_y, acc_y);
 
-		if (x + velocity_X < 0 || x + diameter + velocity_X > getParent().getWidth()) {
-			velocity_X *= -1;
+		if (new_pos_x < 0 || new_pos_x + diameter > getParent().getWidth()) {
+			vel_x *= -1;
+			acc_x *= -1;
+			new_pos_x = alg.secondOrderPolynomial(time, pos_x, vel_x, acc_x);
 		}
-		if (y + velocity_Y < 0 || y + diameter + velocity_Y > getParent().getHeight()) {
-			velocity_Y *= -1;
+		if (new_pos_y < 0 || new_pos_y + diameter > getParent().getHeight()) {
+			vel_y *= -1;
+			acc_y *= -1;
+			new_pos_y = alg.secondOrderPolynomial(time, pos_y, vel_y, acc_y);
 		}
-		x += velocity_X;
-		y += velocity_Y;
 
-		setLocation(x, y);
+		setLocation(new_pos_x, new_pos_y);
 	}
 	
 	public void keyPressed(KeyEvent e){
@@ -50,17 +57,25 @@ public class Ball extends JPanel implements KeyListener{
 		System.out.println("Pressed: " + keycode);
 		switch(keycode){
 		case KeyEvent.VK_UP:
-			velocity_Y += -1;
+			vel_y -= 1;
 			break;
 		case KeyEvent.VK_DOWN:
-			velocity_Y += 1;
+			vel_y += 1;
 			break;
 		case KeyEvent.VK_LEFT:
-			velocity_X += -1;
+			vel_x -= 1;
 			break;
 		case KeyEvent.VK_RIGHT:
-			velocity_X += 1;
+			vel_x += 1;
 			break;
+		case KeyEvent.VK_HOME:
+			acc_x += 1;
+		case KeyEvent.VK_END:
+			acc_x -= 1;
+		case KeyEvent.VK_PAGE_UP:
+			acc_y += 1;
+		case KeyEvent.VK_PAGE_DOWN:
+			acc_y -= 1;
 		}
 
 	}

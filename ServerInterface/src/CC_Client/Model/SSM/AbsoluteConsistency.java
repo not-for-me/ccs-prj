@@ -1,4 +1,4 @@
-package CC_Client.Model.Method;
+package CC_Client.Model.SSM;
 
 public class AbsoluteConsistency {
 
