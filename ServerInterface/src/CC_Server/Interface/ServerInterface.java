@@ -5,6 +5,7 @@ import CC_Server.Model.SSM.FrequentUpdate;
 import CC_Server.Model.SSM.AbsMethod.AbsoluteConsistency;
 import CC_Server.GUI.WindowManager;
 import CC_Server.Model.UserConnInfo;
+import CC_Server.Model.StringQueue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,8 +16,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class ServerInterface {
 	public final static int ABS_MODE = 1;
@@ -27,7 +26,8 @@ public class ServerInterface {
 
 	private static ServerInterface instance = new ServerInterface();
 	private static ArrayList<UserConnInfo> userConnInfoList = new ArrayList<UserConnInfo>();
-	private static Queue<String> jobQueue = new LinkedList<String>();
+	private static StringQueue userMSGQueue = new StringQueue();
+	
 	private int sharedMode = 0;
 	private int port = 0;
 	private int userNum = 0;
@@ -45,8 +45,9 @@ public class ServerInterface {
 	public static ArrayList<UserConnInfo> getUserConnInfoList() {
 		return userConnInfoList;
 	}
-	public static Queue<String> getJobQueue() {
-		return jobQueue;
+	
+	public static StringQueue getUserMSGQueue() {
+		return userMSGQueue;
 	}
 	
 	private void listen() {
@@ -80,13 +81,14 @@ public class ServerInterface {
 	}
 
 	private void start() {
-		sendSharedMode();
+		sendDefaultInfo();
 		
 		
 		switch(sharedMode){
 		case ABS_MODE:
 			System.out.println("Here is Absolute Consistency Mode!");
 			AbsoluteConsistency absMode = new AbsoluteConsistency();
+			absMode.run();
 			break;
 		case FRQ_MODE:
 			System.out.println("Here is Frequently State Update Mode!");
@@ -101,7 +103,7 @@ public class ServerInterface {
 		}
 	}
 
-	private void sendSharedMode() {
+	private void sendDefaultInfo() {
 		System.out.println("Send Shared Mode " + sharedMode + " To Everyone!!!");
 		
 		Iterator<UserConnInfo> iter = getUserConnInfoList().iterator();
@@ -110,24 +112,13 @@ public class ServerInterface {
 			UserConnInfo userInfo = (UserConnInfo) iter.next();
 			PrintWriter out = userInfo.getOut();
 			
-			out.println(sharedMode);
+			String sendMSG = Integer.toString( userInfo.getId() ) + "/" + Integer.toString(sharedMode); 
+			System.out.println("Default Sending MSG: " + sendMSG);
+			out.println(sendMSG);
 			out.flush();
 		}
-		
-	}
-
-	private void goAbsoluteMode() {
-
 	}
 	
-	private void goFrequentUpdateMode() {
-		
-	}
-	
-	private void goDeadReckoningMode() {
-		
-	}
-
 	public int getSharedMode() {
 		return sharedMode;
 	}

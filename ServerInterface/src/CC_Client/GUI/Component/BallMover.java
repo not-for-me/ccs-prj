@@ -1,25 +1,23 @@
 package CC_Client.GUI.Component;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
-import CC_Server.Model.SSM.AbsMethod.MovingBallAlgorithm;
+import CC_Server.Model.Ball;
+import CC_Server.Model.SSM.MovingBallAlgorithm;
 
-public class Ball extends JPanel implements KeyListener{
-	private int vel_x;
-	private int vel_y;
-	private int acc_x;
-	private int acc_y;
+public class BallMover extends JPanel implements KeyListener{
+	private Ball ball;
 	private int diameter;
+	
+	private boolean keyFlag = false;
 	Color color;
 	
-	public Ball( ) {
-		vel_x = 0;
-		vel_y = 0;
-		acc_x = 0;
-		acc_y = 0;
+	public BallMover( ) {
+		ball = new Ball();
 		color = Color.magenta;
 		diameter = 5;
 	}
@@ -32,57 +30,75 @@ public class Ball extends JPanel implements KeyListener{
 	
 	public void move(int time) {
 		MovingBallAlgorithm alg = new MovingBallAlgorithm();
-		int pos_x = getX();
-		int pos_y = getY();
 		
-		int new_pos_x = alg.secondOrderPolynomial(time, pos_x, vel_x, acc_x);
-		int new_pos_y = alg.secondOrderPolynomial(time, pos_y, vel_y, acc_y);
+		int new_pos_x = alg.secondOrderPolynomial(time, getX(), ball.getVel_x(), ball.getAcc_x());
+		int new_pos_y = alg.secondOrderPolynomial(time, getY(), ball.getVel_y(), ball.getAcc_y());
 
 		if (new_pos_x < 0 || new_pos_x + diameter > getParent().getWidth()) {
-			vel_x *= -1;
-			acc_x *= -1;
-			new_pos_x = alg.secondOrderPolynomial(time, pos_x, vel_x, acc_x);
+			ball.setVel_x( ball.getVel_x() * (-1) );
+			ball.setAcc_x( ball.getAcc_x() * (-1) );
+			new_pos_x = alg.secondOrderPolynomial(time, getX(), ball.getVel_x(), ball.getAcc_x());
 		}
 		if (new_pos_y < 0 || new_pos_y + diameter > getParent().getHeight()) {
-			vel_y *= -1;
-			acc_y *= -1;
-			new_pos_y = alg.secondOrderPolynomial(time, pos_y, vel_y, acc_y);
+			ball.setVel_y( ball.getVel_y() * (-1) );
+			ball.setAcc_y( ball.getAcc_y() * (-1) );
+			new_pos_y = alg.secondOrderPolynomial(time, getY(), ball.getVel_y(), ball.getAcc_y());
 		}
 
+		ball.setPos_x(new_pos_x);
+		ball.setPos_y(new_pos_y);
 		setLocation(new_pos_x, new_pos_y);
 	}
 	
 	public void keyPressed(KeyEvent e){
 		int keycode = e.getKeyCode();
 		System.out.println("Pressed: " + keycode);
+		keyFlag = true;
 		switch(keycode){
 		case KeyEvent.VK_UP:
-			vel_y -= 1;
+			ball.setVel_y( ball.getVel_y() - 1 );
 			break;
 		case KeyEvent.VK_DOWN:
-			vel_y += 1;
+			ball.setVel_y( ball.getVel_y() + 1 );
 			break;
 		case KeyEvent.VK_LEFT:
-			vel_x -= 1;
+			ball.setVel_x( ball.getVel_x() - 1 );
 			break;
 		case KeyEvent.VK_RIGHT:
-			vel_x += 1;
+			ball.setVel_x( ball.getVel_x() + 1 );
 			break;
 		case KeyEvent.VK_HOME:
-			acc_x += 1;
+			ball.setAcc_x( ball.getAcc_x() + 1 );
+			break;
 		case KeyEvent.VK_END:
-			acc_x -= 1;
+			ball.setAcc_x( ball.getAcc_x() - 1 );
+			break;
 		case KeyEvent.VK_PAGE_UP:
-			acc_y += 1;
+			ball.setAcc_y( ball.getAcc_y() + 1 );
+			break;
 		case KeyEvent.VK_PAGE_DOWN:
-			acc_y -= 1;
+			ball.setAcc_y( ball.getAcc_y() - 1 );
+			break;
 		}
-
 	}
 	public void keyReleased(KeyEvent e){}
 	public void keyTyped(KeyEvent e){}
-}
+	
+	public boolean isKeyPressed() {
+		return keyFlag;
+	}
+	
+	public void setKeyFlag(boolean keyFlag) {
+		this.keyFlag = keyFlag;
+	}
 
+	public Ball getBall() {
+		return ball;
+	}
+	public void setBall(Ball ball) {
+		this.ball = ball;
+	}
+}
 
 
 /*

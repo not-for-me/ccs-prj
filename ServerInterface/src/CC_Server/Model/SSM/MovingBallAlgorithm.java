@@ -1,4 +1,4 @@
-package CC_Server.Model.SSM.AbsMethod;
+package CC_Server.Model.SSM;
 
 public class MovingBallAlgorithm {
 	

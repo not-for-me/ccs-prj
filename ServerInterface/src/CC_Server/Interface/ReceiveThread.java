@@ -16,8 +16,7 @@ public class ReceiveThread extends Thread {
 			
 			while( ( inputString = userConnInfo.getIn().readLine() ) != null ){
 				System.out.println("Income Message: " + inputString);
-				userConnInfo.getOut().println(inputString);
-				userConnInfo.getOut().flush();
+				ServerInterface.getUserMSGQueue().enqueueString(inputString);
 			}
 			
 			userConnInfo.getSock().close();
