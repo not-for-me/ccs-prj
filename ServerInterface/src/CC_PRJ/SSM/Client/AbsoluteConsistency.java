@@ -17,7 +17,7 @@ public class AbsoluteConsistency {
 		BallMoverWindow ballMoverWindow = new BallMoverWindow();
 		ballMoverWindow.ballWindow();
 		
-		final BallMover ball = new BallMover();
+		final BallMover ball = new BallMover(ClientInterface.ABS_MODE);
 		ballMoverWindow.getBallMoverFrame().add(ball);
 		ballMoverWindow.getBallMoverFrame().addKeyListener(ball);
 		
@@ -57,7 +57,7 @@ public class AbsoluteConsistency {
 			}
 			
 			if( ball.isKeyPressed() ) {
-				ball.move(1);
+				//ball.move(1);
 				String sendMSG = "2/";
 				sendMSG = sendMSG.concat( Integer.toString( userInfo.getUserID() ) );
 				sendMSG = sendMSG.concat("/");
