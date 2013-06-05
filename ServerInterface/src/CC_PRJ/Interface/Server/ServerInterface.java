@@ -3,6 +3,7 @@ package CC_PRJ.Interface.Server;
 import CC_PRJ.DataModel.StringQueue;
 import CC_PRJ.DataModel.UserConnInfo;
 import CC_PRJ.Interface.Component.WindowManager;
+import CC_PRJ.SSM.SharedMode;
 import CC_PRJ.SSM.Server.AbsoluteConsistency;
 import CC_PRJ.SSM.Server.FrequentUpdate;
 //import CC_PRJ.SSM.Server.DeadReckoning;
@@ -19,16 +20,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ServerInterface {
-	public final static int ABS_MODE = 1;
-	public final static int FRQ_MODE = 2;
-	public final static int DEAD_MODE = 3;
 	public final static int TRUE = 1;
 	public final static int FALSE = 0;
 
 	private static ServerInterface instance = new ServerInterface();
 	private static ArrayList<UserConnInfo> userConnInfoList = new ArrayList<UserConnInfo>();
 	private static StringQueue userMSGQueue = new StringQueue();
-	private int sharedMode = 0;
+	
 	
 	private int port = 5000;
 	private int userNum = 0;
@@ -66,7 +64,8 @@ public class ServerInterface {
 				UserConnInfo newComer = new UserConnInfo(sockID, sock, in, out);
 				getUserConnInfoList().add(newComer);
 				System.out.println("New User Detected! Num of Users: " + getUserConnInfoList().size());
-
+				System.out.println("User's ID: " + newComer.getId());
+				
 				ReceiveThread communicationThread = new ReceiveThread(newComer);
 				communicationThread.start();
 				WindowManager.getInstance().getMiddle().getUserTextField().setText(Integer.toString( getUserConnInfoList().size() ));
@@ -79,30 +78,20 @@ public class ServerInterface {
 		System.out.println("User Connection End\nTotal User Number: " + getUserConnInfoList().size() );
 	}
 
-
-
 	private void sendDefaultInfo() {
-		System.out.println("Send Shared Mode " + sharedMode + " To Everyone!!!");
-		
 		Iterator<UserConnInfo> iter = getUserConnInfoList().iterator();
-		
 		while( iter.hasNext() ) {
 			UserConnInfo userInfo = (UserConnInfo) iter.next();
 			PrintWriter out = userInfo.getOut();
 			
-			String sendMSG = Integer.toString( userInfo.getId() ) + "/" + Integer.toString(sharedMode); 
+			String sendMSG = Integer.toString( userInfo.getId() ); 
 			System.out.println("Default Sending MSG: " + sendMSG);
 			out.println(sendMSG);
 			out.flush();
 		}
 	}
+
 	
-	public int getSharedMode() {
-		return sharedMode;
-	}
-	public void setSharedMode(int sharedMode) {
-		this.sharedMode = sharedMode;
-	}
 	public int getPort() {
 		return port;
 	}
@@ -132,25 +121,26 @@ public class ServerInterface {
 		WindowManager.getInstance().drawWindow();
 		
 		while(true){
-			
-			switch(ServerInterface.getInstance().getSharedMode()){
-			case ABS_MODE:
-				System.out.println("Start Absolute Consistency Mode!");
+			switch(SharedMode.getInstance().getSharedMode()){
+			case SharedMode.ABS_MODE:
+				System.out.println("Absolute Consistency Mode!");
 				
 				while(ServerInterface.getInstance().getListenFlag() == FALSE) {}
 				ServerInterface.getInstance().listen();
 				
-				while(ServerInterface.getInstance().getStartFlag() == FALSE) {}
-				//ServerInterface.getInstance().sendDefaultInfo();
+				WindowManager.getInstance().getBottom().getStartBtn().setText("Start");
+				WindowManager.getInstance().getBottom().getStartBtn().setEnabled(false);
+				//while(ServerInterface.getInstance().getStartFlag() == FALSE) {}
+				ServerInterface.getInstance().sendDefaultInfo();
 				AbsoluteConsistency absMode = new AbsoluteConsistency();
 				absMode.run();
 				
 				break;
-			case FRQ_MODE:
-				System.out.println("Start Frequently State Update Mode!");
+			case SharedMode.FRQ_MODE:
+				System.out.println("Frequently State Update Mode!");
 				break;
-			case DEAD_MODE:
-				System.out.println("Here is Dead Reckoning Mode!");
+			case SharedMode.DEAD_MODE:
+				System.out.println("Dead Reckoning Mode!");
 				//DeadReckoning deadMode = new DeadReckoning();
 				break;
 			default:

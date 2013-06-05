@@ -10,6 +10,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import CC_PRJ.Interface.Server.ServerInterface;
+import CC_PRJ.SSM.SharedMode;
 
 public class WindowManager implements ActionListener{
 	private final static int FRAME_WIDTH = 500;
@@ -89,15 +90,21 @@ public class WindowManager implements ActionListener{
 		Object source = event.getSource();
 		if(source == top.getAbsBtn()) {
 			middle.getModeTextField().setText(ABSOLUTE_STRING);
-			ServerInterface.getInstance().setSharedMode(ServerInterface.ABS_MODE);
+			SharedMode.getInstance().setSharedMode(SharedMode.ABS_MODE);
+			bottom.getPortTextField().setEnabled(true);
+			bottom.getUserNumTextField().setEnabled(true);
 		}
 		else if(source == top.getFrqBtn()) {
 			middle.getModeTextField().setText(FRQ_STRING);
-			ServerInterface.getInstance().setSharedMode(ServerInterface.FRQ_MODE);
+			SharedMode.getInstance().setSharedMode(SharedMode.FRQ_MODE);
+			bottom.getPortTextField().setEnabled(false);
+			bottom.getUserNumTextField().setEnabled(false);
 		}
 		else if(source == top.getDeadBtn()) {
 			middle.getModeTextField().setText(DEAD_STRING);
-			ServerInterface.getInstance().setSharedMode(ServerInterface.DEAD_MODE);
+			SharedMode.getInstance().setSharedMode(SharedMode.DEAD_MODE);
+			bottom.getPortTextField().setEnabled(true);
+			bottom.getUserNumTextField().setEnabled(true);
 		}
 		else if(source == bottom.getStartBtn()) {
 			if(bottom.getStartBtn().getText().compareTo("Listen") == 0) {

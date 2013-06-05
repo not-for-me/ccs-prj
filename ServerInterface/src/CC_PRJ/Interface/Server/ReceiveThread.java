@@ -9,7 +9,8 @@ public class ReceiveThread extends Thread {
 	}
 
 	public void run() {
-		System.out.println("Communication Thread Run!!");
+		System.out.println("Receive Thread Run in Server !!!");
+		System.out.println("User ID: " + userConnInfo.getId());
 		try 
 		{
 			String inputString = null;

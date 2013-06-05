@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import CC_PRJ.DataModel.Ball;
 import CC_PRJ.Interface.Client.ClientInterface;
+import CC_PRJ.SSM.SharedMode;
 
 public class BallMover extends JPanel implements KeyListener{
 	private final static int BALL_DIAMETER = 10;
@@ -38,7 +39,7 @@ public class BallMover extends JPanel implements KeyListener{
 		int new_pos_y = getY();
 
 		switch(mode){
-		case ClientInterface.ABS_MODE:
+		case SharedMode.ABS_MODE:
 			System.out.println("Here is Absolute Consistency Mode!");
 			if (new_pos_x > 0 && new_pos_x + diameter < getParent().getWidth())
 				new_pos_x = alg.firstOrderPolynomial(time, getX(), 1);
@@ -46,10 +47,10 @@ public class BallMover extends JPanel implements KeyListener{
 			if (new_pos_y < 0 && new_pos_y + diameter < getParent().getHeight())
 				new_pos_y = alg.firstOrderPolynomial(time, getY(), 1);
 			break;
-		case ClientInterface.FRQ_MODE:
+		case SharedMode.FRQ_MODE:
 			System.out.println("Here is Frequently State Update Mode!");
 			break;
-		case ClientInterface.DEAD_MODE:
+		case SharedMode.DEAD_MODE:
 			System.out.println("Here is Dead Reckoning Mode!");
 			break;
 		default:
@@ -70,7 +71,7 @@ public class BallMover extends JPanel implements KeyListener{
 		keyFlag = true;
 
 		switch(mode){
-		case ClientInterface.ABS_MODE:
+		case SharedMode.ABS_MODE:
 			switch(keycode){
 			case KeyEvent.VK_UP:
 				if(ball.getPos_y() >= 0)
@@ -90,7 +91,7 @@ public class BallMover extends JPanel implements KeyListener{
 				break;
 			}
 			break;
-		case ClientInterface.FRQ_MODE:
+		case SharedMode.FRQ_MODE:
 			switch(keycode){
 			case KeyEvent.VK_UP:
 				ball.setVel_y( ball.getVel_y() - 1 );
@@ -118,7 +119,7 @@ public class BallMover extends JPanel implements KeyListener{
 				break;
 			}
 			break;
-		case ClientInterface.DEAD_MODE:
+		case SharedMode.DEAD_MODE:
 			break;
 		default:
 			break;

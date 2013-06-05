@@ -5,6 +5,7 @@ import CC_PRJ.DataModel.Message;
 import CC_PRJ.DataModel.MessageParser;
 import CC_PRJ.Interface.Client.ClientInterface;
 import CC_PRJ.Interface.Component.BallMoverWindow;
+import CC_PRJ.SSM.SharedMode;
 
 public class FrequentUpdate {
 
@@ -15,7 +16,7 @@ public class FrequentUpdate {
 		BallMoverWindow ballMoverWindow = new BallMoverWindow();
 		ballMoverWindow.ballWindow();
 
-		final BallMover ball = new BallMover(ClientInterface.ABS_MODE);
+		final BallMover ball = new BallMover(SharedMode.ABS_MODE);
 		ballMoverWindow.getBallMoverFrame().add(ball);
 		ballMoverWindow.getBallMoverFrame().addKeyListener(ball);
 

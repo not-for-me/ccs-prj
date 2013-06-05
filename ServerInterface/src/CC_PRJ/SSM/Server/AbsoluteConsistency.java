@@ -10,18 +10,17 @@ import CC_PRJ.Interface.Server.ServerInterface;
 
 public class AbsoluteConsistency {
 	private int userNum;
-	//private boolean[] updateFlagArr; 
 
 	public AbsoluteConsistency(){
-		//ball = new Ball();
 	}
 
 	public void run(){
-		System.out.println("Start Abs Mode");
+		System.out.println("Start Absolute Consistency Mode!!!");
 		userNum = ServerInterface.getUserConnInfoList().size();
-		//updateFlagArr = new boolean[userNum];
+
 		int tempUserNum = 0;
 		while(true) {
+			
 			if(ServerInterface.getUserMSGQueue().getQueue().isEmpty() != true) {
 				String output = ServerInterface.getUserMSGQueue().dequeueString();
 				System.out.println("Dequeued msg: " + output);
@@ -30,7 +29,7 @@ public class AbsoluteConsistency {
 
 				switch(msg.getMsgType()) {
 				case Message.UPDATE_USER:
-					System.out.println("Rcv Packet is Update User Packet!!!");
+					System.out.println("[[Update User Packet] is comming!!!");
 
 					Iterator<UserConnInfo> iter = ServerInterface.getUserConnInfoList().iterator();
 					while( iter.hasNext() ) {
@@ -46,27 +45,17 @@ public class AbsoluteConsistency {
 						out.println(sendMSG);
 						out.flush();
 					}
-					/*
-
-					while(tempUserNum < (userNum - 1)){
-						if(ServerInterface.getUserMSGQueue().getQueue().isEmpty() != true) {
-
-
-							tempUserNum++;
-						}
-					}
-					 */
-
 					break;
 				case Message.RCV_ACK:
-					System.out.println("Rcv Packet is Rcv ACK Packet\n User: " + tempUserNum);
-
-					if(tempUserNum < (userNum - 1)) {
-						//updateFlagArr[msg.getUserID()] = true;
+					System.out.println("[[ACK Packet] is comming!!!");
+					
+					if(tempUserNum < (userNum - 1))
 						tempUserNum++;
-					}
 
+					System.out.println("Current RCV ACK NUM: " + tempUserNum);
+					
 					if(tempUserNum == (userNum - 1)) {
+						System.out.println("RCV ACK NUM is fullfilled");
 						tempUserNum = 0;
 						
 						Iterator<UserConnInfo> iter2 = ServerInterface.getUserConnInfoList().iterator();
@@ -84,6 +73,7 @@ public class AbsoluteConsistency {
 					break;
 				}// Close Switch Statement
 			}// Close If Statement (Queue Info)
+			
 		}// Close While Statement
 	}// Close Run Method
 }

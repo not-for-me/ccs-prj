@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,9 +19,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import CC_PRJ.Interface.Client.ClientInterface;
-import CC_PRJ.Interface.Server.ServerInterface;
+import CC_PRJ.SSM.SharedMode;
 
-public class LoginWindow implements ActionListener {
+public class ClientExecutionWindow implements ActionListener {
 	final static int CONN_FRAME_WIDTH = 500;
 	final static int CONN_FRAME_HEIGHT = 160;
 	final static String CONN_FRAME_TITLE = "Login Window";
@@ -34,17 +36,17 @@ public class LoginWindow implements ActionListener {
 	private JTextField portTextField;
 	private JButton logInBtn;
 	private JButton cancelBtn;
-	
-	private static LoginWindow instance = new LoginWindow();
-	
-	private LoginWindow() {
-		
+
+	private static ClientExecutionWindow instance = new ClientExecutionWindow();
+
+	private ClientExecutionWindow() {
+
 	}
-	
-	public static LoginWindow getInstance() {
+
+	public static ClientExecutionWindow getInstance() {
 		return instance;
 	}
-	
+
 	private void drawFrame() {
 		connectionFrame = new JFrame();
 		connectionFrame.setSize(CONN_FRAME_WIDTH, CONN_FRAME_HEIGHT);
@@ -59,7 +61,7 @@ public class LoginWindow implements ActionListener {
 
 		addressLabel = new JLabel("IP: ");
 		addressLabel.setPreferredSize(new Dimension(20, 30));
-		
+
 		ipTextField = new JTextField("localhost");
 		ipTextField.setPreferredSize(new Dimension(80, 20));
 		ipTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -71,10 +73,10 @@ public class LoginWindow implements ActionListener {
 			public void changedUpdate(DocumentEvent arg0) {}
 			public void removeUpdate(DocumentEvent arg0) {}
 		});
-		
+
 		portLabel = new JLabel("Port: ");
 		portLabel.setPreferredSize(new Dimension(30, 30));
-		
+
 		portTextField = new JTextField("5000");
 		portTextField.setPreferredSize(new Dimension(60, 20));
 		portTextField.getDocument().addDocumentListener(new DocumentListener() {
@@ -106,37 +108,37 @@ public class LoginWindow implements ActionListener {
 		loginPanel.add(cancelBtn);
 	}
 
-	public void drawLoginWindow() {
+	public void drawWindow() {
 		drawFrame();
 		top = new TopComponent();
 		top.getAbsBtn().addActionListener(this);
 		top.getFrqBtn().addActionListener(this);
 		top.getDeadBtn().addActionListener(this);
-		
+
 		drawIpPortPanel();
 		drawLoginPanel();
-		
+
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout(new GridLayout(1,2));
 		Border loginBorder = BorderFactory.createEtchedBorder();
 		loginBorder = BorderFactory.createTitledBorder(loginBorder, "Login Information");
 		bottomPanel.setBorder(loginBorder);
-		
+
 		bottomPanel.add(ipPortPanel);
 		bottomPanel.add(loginPanel);
-		
+
 		connectionFrame.add(top.getTopPanel(), BorderLayout.NORTH);
 		connectionFrame.add(bottomPanel, BorderLayout.CENTER);
 		connectionFrame.setVisible(true);
 	}
-	
+
 	public void actionPerformed(ActionEvent event){
 		Object source = event.getSource();
 		if(source == top.getAbsBtn()) {
-			ClientInterface.getInstance().setSharedMode(ServerInterface.ABS_MODE);
+			SharedMode.getInstance().setSharedMode(SharedMode.ABS_MODE);
 		}
 		else if(source == top.getFrqBtn()) {
-			ClientInterface.getInstance().setSharedMode(ServerInterface.FRQ_MODE);
+			SharedMode.getInstance().setSharedMode(SharedMode.FRQ_MODE);
 			ipTextField.setText("0");
 			portTextField.setText("0");
 			ipTextField.setEditable(false);
@@ -144,11 +146,11 @@ public class LoginWindow implements ActionListener {
 			logInBtn.setText("Start");
 		}
 		else if(source == top.getDeadBtn()) {
-			ClientInterface.getInstance().setSharedMode(ServerInterface.DEAD_MODE);
+			SharedMode.getInstance().setSharedMode(SharedMode.DEAD_MODE);
 		}
 		else if(source == logInBtn) {
 			if(logInBtn.getText().compareTo("Start") == 0) {
-				
+
 			}
 			else if(logInBtn.getText().compareTo("Log In") == 0) {
 				ClientInterface.getInstance().setLoginFlag(ClientInterface.TRUE);
