@@ -2,10 +2,11 @@ package CC_PRJ.Interface.Server;
 
 import CC_PRJ.DataModel.StringQueue;
 import CC_PRJ.DataModel.UserConnInfo;
-import CC_PRJ.Interface.WindowManager;
+import CC_PRJ.Interface.Component.WindowManager;
 import CC_PRJ.SSM.Server.AbsoluteConsistency;
+import CC_PRJ.SSM.Server.FrequentUpdate;
 //import CC_PRJ.SSM.Server.DeadReckoning;
-//import CC_PRJ.SSM.Server.FrequentUpdate;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,8 +28,8 @@ public class ServerInterface {
 	private static ServerInterface instance = new ServerInterface();
 	private static ArrayList<UserConnInfo> userConnInfoList = new ArrayList<UserConnInfo>();
 	private static StringQueue userMSGQueue = new StringQueue();
-	
 	private int sharedMode = 0;
+	
 	private int port = 5000;
 	private int userNum = 0;
 	private int listenFlag = FALSE;
@@ -52,7 +53,6 @@ public class ServerInterface {
 	
 	private void listen() {
 		ServerSocket server;
-
 		try {
 			server = new ServerSocket(port);
 			int count = 0;
@@ -79,28 +79,7 @@ public class ServerInterface {
 		System.out.println("User Connection End\nTotal User Number: " + getUserConnInfoList().size() );
 	}
 
-	private void start() {
-		sendDefaultInfo();
-		
-		
-		switch(sharedMode){
-		case ABS_MODE:
-			System.out.println("Here is Absolute Consistency Mode!");
-			AbsoluteConsistency absMode = new AbsoluteConsistency();
-			absMode.run();
-			break;
-		case FRQ_MODE:
-			System.out.println("Here is Frequently State Update Mode!");
-			//FrequentUpdate frqMode = new FrequentUpdate();
-			break;
-		case DEAD_MODE:
-			System.out.println("Here is Dead Reckoning Mode!");
-			//DeadReckoning deadMode = new DeadReckoning();
-			break;
-		default:
-			break;
-		}
-	}
+
 
 	private void sendDefaultInfo() {
 		System.out.println("Send Shared Mode " + sharedMode + " To Everyone!!!");
@@ -151,12 +130,34 @@ public class ServerInterface {
 	
 	public static void main(String[] args){
 		WindowManager.getInstance().drawWindow();
-
-		while(ServerInterface.getInstance().getListenFlag() == FALSE) {}
-		ServerInterface.getInstance().listen();
 		
-		while(ServerInterface.getInstance().getStartFlag() == FALSE) {}
-		ServerInterface.getInstance().start();
+		while(true){
+			
+			switch(ServerInterface.getInstance().getSharedMode()){
+			case ABS_MODE:
+				System.out.println("Start Absolute Consistency Mode!");
+				
+				while(ServerInterface.getInstance().getListenFlag() == FALSE) {}
+				ServerInterface.getInstance().listen();
+				
+				while(ServerInterface.getInstance().getStartFlag() == FALSE) {}
+				//ServerInterface.getInstance().sendDefaultInfo();
+				AbsoluteConsistency absMode = new AbsoluteConsistency();
+				absMode.run();
+				
+				break;
+			case FRQ_MODE:
+				System.out.println("Start Frequently State Update Mode!");
+				break;
+			case DEAD_MODE:
+				System.out.println("Here is Dead Reckoning Mode!");
+				//DeadReckoning deadMode = new DeadReckoning();
+				break;
+			default:
+				break;
+			}
+			
+		}
 		
 		// Initialization and ReDo ???
 	}

@@ -3,8 +3,9 @@ package CC_PRJ.Interface.Client;
 import CC_PRJ.DataModel.StringQueue;
 import CC_PRJ.Interface.Component.LoginWindow;
 import CC_PRJ.SSM.Client.AbsoluteConsistency;
+import CC_PRJ.SSM.Client.FrequentUpdate;
 //import CC_PRJ.SSM.Client.DeadReckoning;
-//import CC_PRJ.SSM.Client.FrequentUpdate;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -89,7 +90,6 @@ public class ClientInterface {
 	public void setSock(Socket sock) {
 		this.sock = sock;
 	}
-
 	public int getUserID() {
 		return userID;
 	}
@@ -108,7 +108,13 @@ public class ClientInterface {
 	public void setIn(BufferedReader in) {
 		this.in = in;
 	}
-
+	public int getSharedMode() {
+		return sharedMode;
+	}
+	public void setSharedMode(int sharedMode) {
+		this.sharedMode = sharedMode;
+	}
+	/*
 	private void getDefaultInfo() {
 		try {
 			String input;
@@ -120,24 +126,22 @@ public class ClientInterface {
 			e.printStackTrace();
 		}
 	}
-
+*/
 	private void start() {
-		
-		this.getDefaultInfo();
-		
-		ReceiveThread rcvThread = new ReceiveThread(in);
-		rcvThread.start();
-		
+		//this.getDefaultInfo();
 		System.out.println("Received Shrared Stated Mode from Server: " + sharedMode);
 		switch(sharedMode){
 		case ABS_MODE:
 			System.out.println("Here is Absolute Consistency Mode!");
+			ReceiveThread rcvThread = new ReceiveThread(in);
+			rcvThread.start();
 			AbsoluteConsistency absMode = new AbsoluteConsistency(this);
 			absMode.run();
 			break;
 		case FRQ_MODE:
 			System.out.println("Here is Frequently State Update Mode!");
-			//FrequentUpdate frqMode = new FrequentUpdate();
+			FrequentUpdate frqMode = new FrequentUpdate();
+			frqMode.run();
 			break;
 		case DEAD_MODE:
 			System.out.println("Here is Dead Reckoning Mode!");

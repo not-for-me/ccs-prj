@@ -17,6 +17,7 @@ public class AbsoluteConsistency {
 	}
 
 	public void run(){
+		System.out.println("Start Abs Mode");
 		userNum = ServerInterface.getUserConnInfoList().size();
 		//updateFlagArr = new boolean[userNum];
 		int tempUserNum = 0;

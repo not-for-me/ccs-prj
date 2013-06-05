@@ -1,4 +1,4 @@
-package CC_PRJ.Interface;
+package CC_PRJ.Interface.Component;
 
 import javax.swing.JFrame;
 

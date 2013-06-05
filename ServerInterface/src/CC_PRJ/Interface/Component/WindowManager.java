@@ -1,4 +1,4 @@
-package CC_PRJ.Interface;
+package CC_PRJ.Interface.Component;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -9,9 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import CC_PRJ.Interface.Component.BottomComponent;
-import CC_PRJ.Interface.Component.MiddleComponent;
-import CC_PRJ.Interface.Component.TopComponent;
 import CC_PRJ.Interface.Server.ServerInterface;
 
 public class WindowManager implements ActionListener{

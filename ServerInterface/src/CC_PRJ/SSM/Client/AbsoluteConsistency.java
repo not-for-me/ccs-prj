@@ -3,8 +3,8 @@ package CC_PRJ.SSM.Client;
 import CC_PRJ.AnimateLogic.BallMover;
 import CC_PRJ.DataModel.Message;
 import CC_PRJ.DataModel.MessageParser;
-import CC_PRJ.Interface.BallMoverWindow;
 import CC_PRJ.Interface.Client.ClientInterface;
+import CC_PRJ.Interface.Component.BallMoverWindow;
 
 public class AbsoluteConsistency {
 	ClientInterface userInfo;
