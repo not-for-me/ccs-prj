@@ -4,8 +4,8 @@ import CC_PRJ.DataModel.StringQueue;
 import CC_PRJ.DataModel.UserConnInfo;
 import CC_PRJ.Interface.Component.ClientExecutionWindow;
 import CC_PRJ.SSM.SharedMode;
-import CC_PRJ.SSM.Client.AbsoluteConsistency;
-import CC_PRJ.SSM.Client.FrequentUpdate;
+import CC_PRJ.SSM.Client.AbsMode.AbsoluteConsistency;
+import CC_PRJ.SSM.Client.FrqMode.FrequentUpdate;
 //import CC_PRJ.SSM.Client.DeadReckoning;
 
 
@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.StringTokenizer;
 
 public class ClientInterface {
 	public static BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
@@ -189,8 +188,10 @@ public class ClientInterface {
 					break;
 				case SharedMode.FRQ_MODE:
 					System.out.println("Here is Frequently State Update Mode!");
+					while(ClientInterface.getInstance().getLoginFlag() == FALSE) {}
 					FrequentUpdate frqMode = new FrequentUpdate();
 					frqMode.run();
+					System.exit(0);
 					break;
 				case SharedMode.DEAD_MODE:
 					System.out.println("Here is Dead Reckoning Mode!");

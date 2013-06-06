@@ -139,8 +139,8 @@ public class ClientExecutionWindow implements ActionListener {
 		}
 		else if(source == top.getFrqBtn()) {
 			SharedMode.getInstance().setSharedMode(SharedMode.FRQ_MODE);
-			ipTextField.setText("0");
-			portTextField.setText("0");
+			ipTextField.setText("localhost");
+			portTextField.setText("35000");
 			ipTextField.setEditable(false);
 			portTextField.setEditable(false);
 			logInBtn.setText("Start");
@@ -149,12 +149,12 @@ public class ClientExecutionWindow implements ActionListener {
 			SharedMode.getInstance().setSharedMode(SharedMode.DEAD_MODE);
 		}
 		else if(source == logInBtn) {
-			if(logInBtn.getText().compareTo("Start") == 0) {
-
-			}
-			else if(logInBtn.getText().compareTo("Log In") == 0) {
+			//if(logInBtn.getText().compareTo("Start") == 0) {
+				
+			//}
+		//	else if(logInBtn.getText().compareTo("Log In") == 0) {
 				ClientInterface.getInstance().setLoginFlag(ClientInterface.TRUE);
-			}
+			//}
 			connectionFrame.setVisible(false);
 		}
 		else if(source == cancelBtn) {

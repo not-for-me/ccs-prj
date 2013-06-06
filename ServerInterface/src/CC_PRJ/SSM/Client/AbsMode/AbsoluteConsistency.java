@@ -1,4 +1,4 @@
-package CC_PRJ.SSM.Client;
+package CC_PRJ.SSM.Client.AbsMode;
 
 import CC_PRJ.AnimateLogic.BallMover;
 import CC_PRJ.DataModel.Message;

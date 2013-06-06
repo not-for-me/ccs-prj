@@ -138,6 +138,8 @@ public class ServerInterface {
 				break;
 			case SharedMode.FRQ_MODE:
 				System.out.println("Frequently State Update Mode!");
+				FrequentUpdate frqMode = new FrequentUpdate();
+				frqMode.run();
 				break;
 			case SharedMode.DEAD_MODE:
 				System.out.println("Dead Reckoning Mode!");
