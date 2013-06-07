@@ -4,8 +4,9 @@ import CC_PRJ.DataModel.StringQueue;
 import CC_PRJ.DataModel.UserConnInfo;
 import CC_PRJ.Interface.Component.WindowManager;
 import CC_PRJ.SSM.SharedMode;
-import CC_PRJ.SSM.Server.AbsoluteConsistency;
-import CC_PRJ.SSM.Server.FrequentUpdate;
+import CC_PRJ.SSM.Server.AbsMode.AbsoluteConsistency;
+import CC_PRJ.SSM.Server.DeadMode.DeadReckoning;
+import CC_PRJ.SSM.Server.FrqMode.FrequentUpdate;
 //import CC_PRJ.SSM.Server.DeadReckoning;
 
 
@@ -143,7 +144,17 @@ public class ServerInterface {
 				break;
 			case SharedMode.DEAD_MODE:
 				System.out.println("Dead Reckoning Mode!");
-				//DeadReckoning deadMode = new DeadReckoning();
+				
+				while(ServerInterface.getInstance().getListenFlag() == FALSE) {}
+				ServerInterface.getInstance().listen();
+				
+				WindowManager.getInstance().getBottom().getStartBtn().setText("Start");
+				WindowManager.getInstance().getBottom().getStartBtn().setEnabled(false);
+				//while(ServerInterface.getInstance().getStartFlag() == FALSE) {}
+				ServerInterface.getInstance().sendDefaultInfo();
+				DeadReckoning deadMode = new DeadReckoning();
+				deadMode.run();
+				
 				break;
 			default:
 				break;

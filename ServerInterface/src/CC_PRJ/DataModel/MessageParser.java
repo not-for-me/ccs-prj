@@ -34,7 +34,7 @@ public class MessageParser {
 			msg.getBall().setVel_x( Integer.parseInt( locStr.nextToken() ) );
 			msg.getBall().setVel_y( Integer.parseInt( locStr.nextToken() ) );
 			msg.getBall().setAcc_x( Integer.parseInt( locStr.nextToken() ) );
-			//msg.getBall().setAcc_y( Integer.parseInt( locStr.nextToken() ) );
+			msg.getBall().setAcc_y( Integer.parseInt( locStr.nextToken() ) );
 			msg.getBall().printBallInfo();
 		}
 		System.out.println("=======================\n");

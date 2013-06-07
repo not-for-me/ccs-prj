@@ -5,6 +5,7 @@ import CC_PRJ.DataModel.UserConnInfo;
 import CC_PRJ.Interface.Component.ClientExecutionWindow;
 import CC_PRJ.SSM.SharedMode;
 import CC_PRJ.SSM.Client.AbsMode.AbsoluteConsistency;
+import CC_PRJ.SSM.Client.DeadMode.DeadReckoning;
 import CC_PRJ.SSM.Client.FrqMode.FrequentUpdate;
 //import CC_PRJ.SSM.Client.DeadReckoning;
 
@@ -194,8 +195,23 @@ public class ClientInterface {
 					System.exit(0);
 					break;
 				case SharedMode.DEAD_MODE:
-					System.out.println("Here is Dead Reckoning Mode!");
-					//DeadReckoning deadMode = new DeadReckoning();
+					System.out.println("Here is Dead Reckoning Mode!!!");
+					
+					ClientInterface.getInstance().connect();
+					//ClientInterface.getInstance().start();
+					ClientInterface.getInstance().getDefaultInfo();
+					ReceiveThread rcv2Thread = new ReceiveThread(ClientInterface.getInstance().getIn());
+					rcv2Thread.start();
+					
+					UserConnInfo userInfo2 = new UserConnInfo(ClientInterface.getInstance().getUserID(), ClientInterface.getInstance().getSock(), 
+															ClientInterface.getInstance().getIn(), ClientInterface.getInstance().getOut() );
+					
+					DeadReckoning deadMode = new DeadReckoning(userInfo2);
+					deadMode.run();
+					
+					System.out.println("End?");
+					ClientInterface.getInstance().close();
+					System.exit(0);
 					break;
 				default:
 					break;

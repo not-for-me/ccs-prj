@@ -7,7 +7,6 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
 import CC_PRJ.DataModel.Ball;
-import CC_PRJ.Interface.Client.ClientInterface;
 import CC_PRJ.SSM.SharedMode;
 
 public class BallMover extends JPanel implements KeyListener{
@@ -35,23 +34,46 @@ public class BallMover extends JPanel implements KeyListener{
 
 	public void move(int time) {
 		MovingBallAlgorithm alg = new MovingBallAlgorithm();
-		int new_pos_x = getX();
-		int new_pos_y = getY();
+		int new_pos_x = ball.getPos_x();
+		int new_pos_y = ball.getPos_y();
 
 		switch(mode){
 		case SharedMode.ABS_MODE:
-			System.out.println("Here is Absolute Consistency Mode!");
-			if (new_pos_x > 0 && new_pos_x + diameter < getParent().getWidth())
+			System.out.println("[Move]Here is Absolute Consistency Mode!");
+			if (new_pos_x > 0 && new_pos_x + diameter < 400)
 				new_pos_x = alg.firstOrderPolynomial(time, getX(), 1);
 
-			if (new_pos_y < 0 && new_pos_y + diameter < getParent().getHeight())
+			if (new_pos_y < 0 && new_pos_y + diameter < 400)
 				new_pos_y = alg.firstOrderPolynomial(time, getY(), 1);
 			break;
 		case SharedMode.FRQ_MODE:
-			System.out.println("Here is Frequently State Update Mode!");
+			System.out.println("[Move]Here is Frequently State Update Mode!");
 			break;
 		case SharedMode.DEAD_MODE:
-			System.out.println("Here is Dead Reckoning Mode!");
+			//System.out.println("[Move]Here is Dead Reckoning Mode!");
+			/*
+			System.out.println("Time Value: " + time);
+			System.out.println("Before. Pos X: " + new_pos_x + " Pos Y: " + new_pos_y);
+			System.out.println("Before. Vel X: " +  ball.getVel_x() + " Vel Y: " +  ball.getVel_y());
+			System.out.println("Before. Acc X: " +  ball.getAcc_x() + " Acc Y: " +  ball.getAcc_y());
+			*/
+			new_pos_x = alg.secondOrderPolynomial(time, ball.getPos_x(), ball.getVel_x(), ball.getAcc_x());
+			new_pos_y = alg.secondOrderPolynomial(time, ball.getPos_y(), ball.getVel_y(), ball.getAcc_y());
+			
+			if (new_pos_x < 0 || new_pos_x + diameter > 400) {
+				ball.setVel_x( ball.getVel_x() * (-1) );
+				ball.setAcc_x( ball.getAcc_x() * (-1) );
+				new_pos_x = alg.secondOrderPolynomial(time, ball.getPos_x(), ball.getVel_x(), ball.getAcc_x());
+			}
+				
+			
+			if (new_pos_y < 0 || new_pos_y + diameter > 400){
+				ball.setVel_y( ball.getVel_y() * (-1) );
+				ball.setAcc_y( ball.getAcc_y() * (-1) );
+				new_pos_y = alg.secondOrderPolynomial(time, ball.getPos_y(), ball.getVel_y(), ball.getAcc_y());
+			}
+			
+			//System.out.println("Cal. Pos X: " + new_pos_x + " Pos Y: " + new_pos_y);
 			break;
 		default:
 			break;
@@ -61,8 +83,12 @@ public class BallMover extends JPanel implements KeyListener{
 	}
 
 	public void redraw() {
-		ball.printBallInfo();
+		//ball.printBallInfo();
 		setLocation(ball.getPos_x(), ball.getPos_y());
+	}
+	
+	public void redraw(int x, int y) {
+		setLocation(x, y);
 	}
 
 	public void keyPressed(KeyEvent e){
@@ -92,6 +118,7 @@ public class BallMover extends JPanel implements KeyListener{
 			}
 			break;
 		case SharedMode.FRQ_MODE:
+		case SharedMode.DEAD_MODE:
 			switch(keycode){
 			case KeyEvent.VK_UP:
 				ball.setVel_y( ball.getVel_y() - 1 );
@@ -118,8 +145,6 @@ public class BallMover extends JPanel implements KeyListener{
 				ball.setAcc_y( ball.getAcc_y() - 1 );
 				break;
 			}
-			break;
-		case SharedMode.DEAD_MODE:
 			break;
 		default:
 			break;

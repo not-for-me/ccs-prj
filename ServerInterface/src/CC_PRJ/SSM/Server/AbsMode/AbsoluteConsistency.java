@@ -1,4 +1,4 @@
-package CC_PRJ.SSM.Server;
+package CC_PRJ.SSM.Server.AbsMode;
 
 import java.io.PrintWriter;
 import java.util.Iterator;

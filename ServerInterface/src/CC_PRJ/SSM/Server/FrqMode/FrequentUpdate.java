@@ -1,4 +1,4 @@
-package CC_PRJ.SSM.Server;
+package CC_PRJ.SSM.Server.FrqMode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
