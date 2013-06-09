@@ -108,11 +108,11 @@ public class WindowManager implements ActionListener{
 		}
 		else if(source == bottom.getStartBtn()) {
 			if(bottom.getStartBtn().getText().compareTo("Listen") == 0) {
-				ServerInterface.getInstance().setListenFlag(ServerInterface.TRUE);
+				ServerInterface.getInstance().setListenFlag(true);
 				bottom.getStartBtn().setText("Start");
 			}
 			else if(bottom.getStartBtn().getText().compareTo("Start") == 0) {
-				ServerInterface.getInstance().setStartFlag(ServerInterface.TRUE);
+				ServerInterface.getInstance().setStartFlag(true);
 				bottom.getStartBtn().setText("Playing...");
 				top.getAbsBtn().setEnabled(false);
 				top.getFrqBtn().setEnabled(false);

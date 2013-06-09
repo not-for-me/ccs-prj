@@ -8,9 +8,8 @@ import javax.swing.JFrame;
 import CC_PRJ.Interface.Client.ClientInterface;
 
 public class BallMoverWindow {
-	final static int FRAME_WIDTH = 400;
-	final static int FRAME_HEIGHT = 400;
-	final static int DELAY = 10; // Milliseconds between timer ticks
+	public final static int FRAME_WIDTH = 500;
+	public final static int FRAME_HEIGHT = 500;
 	final static String FRAME_TITLE = "Object Trajectory Window";
 	private JFrame frame;
 	
@@ -18,7 +17,6 @@ public class BallMoverWindow {
 		frame = new JFrame();
 		frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		frame.setTitle(FRAME_TITLE);
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.addWindowListener( new WindowAdapter() { 
 			public void windowClosing(WindowEvent ev) {

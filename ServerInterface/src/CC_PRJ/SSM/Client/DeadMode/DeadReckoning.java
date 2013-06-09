@@ -1,6 +1,7 @@
 package CC_PRJ.SSM.Client.DeadMode;
 
 import CC_PRJ.AnimateLogic.BallMover;
+import CC_PRJ.DataModel.Ball;
 import CC_PRJ.DataModel.Message;
 import CC_PRJ.DataModel.MessageParser;
 import CC_PRJ.DataModel.UserConnInfo;
@@ -10,7 +11,7 @@ import CC_PRJ.SSM.SharedMode;
 
 public class DeadReckoning {
 	UserConnInfo userInfo;
-
+	
 	public DeadReckoning(UserConnInfo userInfo) {
 		this.userInfo = userInfo;
 	}
@@ -22,9 +23,15 @@ public class DeadReckoning {
 		final BallMover ball = new BallMover(SharedMode.DEAD_MODE);
 		ballMoverWindow.getBallMoverFrame().add(ball);
 		ballMoverWindow.getBallMoverFrame().addKeyListener(ball);
-		ball.redraw(200,200);
-		RepaintThread repaintThread = new RepaintThread(ball);
-		repaintThread.start();
+		
+		System.out.println("Require Default Info ");
+		String df = "6/";
+		df = df.concat( Integer.toString( userInfo.getId() ) );
+		df = df.concat("/Default Info");
+		System.out.println("Sending MSG: " + df);
+		userInfo.getOut().println(df);
+		userInfo.getOut().flush();
+		
 		
 		while(ClientInterface.getInstance().getCloseFlag() == ClientInterface.FALSE) {
 			
@@ -35,11 +42,19 @@ public class DeadReckoning {
 				Message msg = parser.parseMessage();
 
 				switch(msg.getMsgType()) {
+				case Message.DEFAULT_INFO:
+					System.out.println("[DEFAULT INFO Packet] is comming!!!");
+					try { Thread.sleep(100); } catch (InterruptedException e) { System.out.println("Interrupted"); }
+					ball.setBall(msg.getBall());
+					ball.redraw();
+					RepaintThread repaintThread = new RepaintThread(ball);
+					repaintThread.start();
+					break;	
 				case Message.UPDATE_SERVER:
 					System.out.println("[[Update Server Packet] is comming!!!");
 					ball.setBall(msg.getBall());
-					ball.redraw();
-					ball.repaint();
+					//ball.redraw();
+					//ball.repaint();
 					break;
 				default:
 					break;

@@ -22,6 +22,16 @@ public class AbsoluteConsistency {
 		final BallMover ball = new BallMover(SharedMode.ABS_MODE);
 		ballMoverWindow.getBallMoverFrame().add(ball);
 		ballMoverWindow.getBallMoverFrame().addKeyListener(ball);
+		//ball.setVisible(false);
+		
+		System.out.println("Require Default Info ");
+		String df = "6/";
+		df = df.concat( Integer.toString( userInfo.getId() ) );
+		df = df.concat("/Default Info");
+		System.out.println("Sending MSG: " + df);
+		userInfo.getOut().println(df);
+		userInfo.getOut().flush();
+		
 		
 		while(ClientInterface.getInstance().getCloseFlag() == ClientInterface.FALSE) {
 			if(ClientInterface.getMSGQueue().getQueue().isEmpty() != true) {
@@ -32,7 +42,7 @@ public class AbsoluteConsistency {
 				
 				switch(msg.getMsgType()) {
 				case Message.UPDATE_SERVER:
-					System.out.println("[[Update Server Packet] is comming!!!");
+					System.out.println("[Update Server Packet] is comming!!!");
 					ball.setBall(msg.getBall());
 					
 					System.out.println("Send Rcv Ack Message in User " + userInfo.getId() );
@@ -43,10 +53,19 @@ public class AbsoluteConsistency {
 					userInfo.getOut().println(sendMSG);
 					userInfo.getOut().flush();
 					break;
+				case Message.DEFAULT_INFO:
+					System.out.println("[DEFAULT INFO Packet] is comming!!!");
+					//ball.setVisible(false);
+					try { Thread.sleep(100); } catch (InterruptedException e) { System.out.println("Interrupted"); }
+					ball.setBall(msg.getBall());
+					ball.redraw();
+					//ball.setVisible(true);
+					//ball.repaint();
+					break;	
 				case Message.ALLOW_VIEW:
 					System.out.println("[[Allow View Packet] is comming!!!");
 					ball.redraw();
-					ball.repaint();
+					//ball.repaint();
 					break;
 				default:
 					break;

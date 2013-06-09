@@ -17,27 +17,33 @@ public class MessageParser {
 		
 		msg.setMsgType( Integer.parseInt( str.nextToken() ) );
 		
-		if(msg.getMsgType() == Message.UPDATE_USER || msg.getMsgType() == Message.RCV_ACK)
+		if(msg.getMsgType() == Message.REQUIRE_INFO ||msg.getMsgType() == Message.UPDATE_USER || msg.getMsgType() == Message.RCV_ACK)
 			msg.setUserID(  Integer.parseInt( str.nextToken() ) );
 		
 		msg.setMsgContent( str.nextToken() );
-		System.out.println("\n=======================\nIn Message Parser (Parsing Result)");
-		System.out.println("MSG Type: " + msg.getMsgType());
-		System.out.println("User ID: " + msg.getUserID());
-		System.out.println("MSG Content: " + msg.getMsgContent());
 		
-		if(msg.getMsgType() == Message.UPDATE_USER || msg.getMsgType() == Message.UPDATE_SERVER) {
+		//printParsingResult();
+		
+		if(msg.getMsgType() == Message.UPDATE_USER || msg.getMsgType() == Message.UPDATE_SERVER  || msg.getMsgType() == Message.DEFAULT_INFO) {
 			String locationStr =  msg.getMsgContent();
 			StringTokenizer locStr = new StringTokenizer(locationStr, ",");
 			msg.getBall().setPos_x( Integer.parseInt( locStr.nextToken() ) );
 			msg.getBall().setPos_y( Integer.parseInt( locStr.nextToken() ) );
 			msg.getBall().setVel_x( Integer.parseInt( locStr.nextToken() ) );
 			msg.getBall().setVel_y( Integer.parseInt( locStr.nextToken() ) );
-			msg.getBall().setAcc_x( Integer.parseInt( locStr.nextToken() ) );
-			msg.getBall().setAcc_y( Integer.parseInt( locStr.nextToken() ) );
-			msg.getBall().printBallInfo();
+			//msg.getBall().setAcc_x( Integer.parseInt( locStr.nextToken() ) );
+			//msg.getBall().setAcc_y( Integer.parseInt( locStr.nextToken() ) );
+			//msg.getBall().printBallInfo();
 		}
-		System.out.println("=======================\n");
+		
 		return msg;
+	}
+	
+	private void printParsingResult(){
+		System.out.println("\n=======================\nIn Message Parser (Parsing Result)");
+		System.out.println("MSG Type: " + msg.getMsgType());
+		System.out.println("User ID: " + msg.getUserID());
+		System.out.println("MSG Content: " + msg.getMsgContent());
+		System.out.println("=======================\n");
 	}
 }

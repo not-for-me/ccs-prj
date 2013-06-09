@@ -6,7 +6,7 @@ import CC_PRJ.Interface.Component.ClientExecutionWindow;
 import CC_PRJ.SSM.SharedMode;
 import CC_PRJ.SSM.Client.AbsMode.AbsoluteConsistency;
 import CC_PRJ.SSM.Client.DeadMode.DeadReckoning;
-import CC_PRJ.SSM.Client.FrqMode.FrequentUpdate;
+import CC_PRJ.SSM.Client.FrqMode.FrequentStateRegeneration;
 //import CC_PRJ.SSM.Client.DeadReckoning;
 
 
@@ -190,7 +190,7 @@ public class ClientInterface {
 				case SharedMode.FRQ_MODE:
 					System.out.println("Here is Frequently State Update Mode!");
 					while(ClientInterface.getInstance().getLoginFlag() == FALSE) {}
-					FrequentUpdate frqMode = new FrequentUpdate();
+					FrequentStateRegeneration frqMode = new FrequentStateRegeneration();
 					frqMode.run();
 					System.exit(0);
 					break;

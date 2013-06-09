@@ -1,12 +1,13 @@
 package CC_PRJ.Interface.Server;
 
+import CC_PRJ.Communication.SocketListen;
 import CC_PRJ.DataModel.StringQueue;
 import CC_PRJ.DataModel.UserConnInfo;
 import CC_PRJ.Interface.Component.WindowManager;
 import CC_PRJ.SSM.SharedMode;
 import CC_PRJ.SSM.Server.AbsMode.AbsoluteConsistency;
 import CC_PRJ.SSM.Server.DeadMode.DeadReckoning;
-import CC_PRJ.SSM.Server.FrqMode.FrequentUpdate;
+import CC_PRJ.SSM.Server.FrqMode.FrequentStateRegenerate;
 //import CC_PRJ.SSM.Server.DeadReckoning;
 
 
@@ -21,18 +22,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ServerInterface {
-	public final static int TRUE = 1;
-	public final static int FALSE = 0;
-
 	private static ServerInterface instance = new ServerInterface();
 	private static ArrayList<UserConnInfo> userConnInfoList = new ArrayList<UserConnInfo>();
 	private static StringQueue userMSGQueue = new StringQueue();
 	
-	
 	private int port = 5000;
 	private int userNum = 0;
-	private int listenFlag = FALSE;
-	private int startFlag = FALSE;
+	private boolean listenFlag = false;
+	private boolean startFlag = false;
 	private int sockID = 0;
 
 	private ServerInterface() {
@@ -49,7 +46,7 @@ public class ServerInterface {
 	public static StringQueue getUserMSGQueue() {
 		return userMSGQueue;
 	}
-	
+	/*
 	private void listen() {
 		ServerSocket server;
 		try {
@@ -78,18 +75,12 @@ public class ServerInterface {
 		}
 		System.out.println("User Connection End\nTotal User Number: " + getUserConnInfoList().size() );
 	}
-
-	private void sendDefaultInfo() {
-		Iterator<UserConnInfo> iter = getUserConnInfoList().iterator();
-		while( iter.hasNext() ) {
-			UserConnInfo userInfo = (UserConnInfo) iter.next();
-			PrintWriter out = userInfo.getOut();
-			
-			String sendMSG = Integer.toString( userInfo.getId() ); 
-			System.out.println("Default Sending MSG: " + sendMSG);
+*/
+	public void sendUserIDInfo(UserConnInfo userConnInfo) {
+			PrintWriter out = userConnInfo.getOut();
+			String sendMSG = Integer.toString( userConnInfo.getId() ); 
 			out.println(sendMSG);
 			out.flush();
-		}
 	}
 
 	
@@ -105,53 +96,58 @@ public class ServerInterface {
 	public void setUserNum(int userNum) {
 		this.userNum = userNum;
 	}
-	public int getListenFlag() {
+	public boolean isListenFlag() {
 		return listenFlag;
 	}
-	public void setListenFlag(int listenFlag) {
+	public void setListenFlag(boolean listenFlag) {
 		this.listenFlag = listenFlag;
 	}
-	public int getStartFlag() {
+	public boolean isStartFlag() {
 		return startFlag;
 	}
-	public void setStartFlag(int startFlag) {
+	public void setStartFlag(boolean startFlag) {
 		this.startFlag = startFlag;
 	}
-	
+
 	public static void main(String[] args){
 		WindowManager.getInstance().drawWindow();
 		
 		while(true){
 			switch(SharedMode.getInstance().getSharedMode()){
 			case SharedMode.ABS_MODE:
-				System.out.println("Absolute Consistency Mode!");
+				System.out.println("[Server] Absolute Consistency Mode!");
 				
-				while(ServerInterface.getInstance().getListenFlag() == FALSE) {}
-				ServerInterface.getInstance().listen();
+				while(ServerInterface.getInstance().isListenFlag() == false) {}
+				//ServerInterface.getInstance().listen();
+				
+				SocketListen listen = new SocketListen();
+				listen.start();
 				
 				WindowManager.getInstance().getBottom().getStartBtn().setText("Start");
 				WindowManager.getInstance().getBottom().getStartBtn().setEnabled(false);
 				//while(ServerInterface.getInstance().getStartFlag() == FALSE) {}
-				ServerInterface.getInstance().sendDefaultInfo();
 				AbsoluteConsistency absMode = new AbsoluteConsistency();
 				absMode.run();
 				
 				break;
 			case SharedMode.FRQ_MODE:
-				System.out.println("Frequently State Update Mode!");
-				FrequentUpdate frqMode = new FrequentUpdate();
+				System.out.println("[Server] Frequently State Regeneration Mode!");
+				FrequentStateRegenerate frqMode = new FrequentStateRegenerate();
 				frqMode.run();
 				break;
 			case SharedMode.DEAD_MODE:
-				System.out.println("Dead Reckoning Mode!");
+				System.out.println("[Server] Dead Reckoning Mode!");
 				
-				while(ServerInterface.getInstance().getListenFlag() == FALSE) {}
-				ServerInterface.getInstance().listen();
+				while(ServerInterface.getInstance().isListenFlag() == false) {}
+				//ServerInterface.getInstance().listen();
+				
+				SocketListen listen2 = new SocketListen();
+				listen2.start();
 				
 				WindowManager.getInstance().getBottom().getStartBtn().setText("Start");
 				WindowManager.getInstance().getBottom().getStartBtn().setEnabled(false);
 				//while(ServerInterface.getInstance().getStartFlag() == FALSE) {}
-				ServerInterface.getInstance().sendDefaultInfo();
+				//ServerInterface.getInstance().sendUserIDInfo();
 				DeadReckoning deadMode = new DeadReckoning();
 				deadMode.run();
 				
@@ -159,10 +155,7 @@ public class ServerInterface {
 			default:
 				break;
 			}
-			
 		}
-		
 		// Initialization and ReDo ???
 	}
-
 }

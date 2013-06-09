@@ -8,11 +8,11 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class FrequentUpdate {
+public class FrequentStateRegenerate {
 	private boolean lockFlag = false;
 	private int port = 35000;
 	
-	public FrequentUpdate() {
+	public FrequentStateRegenerate() {
 
 	}
 

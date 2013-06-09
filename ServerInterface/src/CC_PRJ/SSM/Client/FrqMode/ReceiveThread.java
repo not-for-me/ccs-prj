@@ -30,7 +30,7 @@ public class ReceiveThread extends Thread {
 				ms.receive(dp);
 				String strPacket =  new String(dp.getData());
 				System.out.println("Result: " + strPacket);
-				FrequentUpdate.getMSGQueue().enqueueString(strPacket);
+				FrequentStateRegeneration.getMSGQueue().enqueueString(strPacket);
 			}catch(IOException ie){}
 		}
 		

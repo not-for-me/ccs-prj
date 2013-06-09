@@ -7,29 +7,30 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
 import CC_PRJ.DataModel.Ball;
+import CC_PRJ.Interface.Component.BallMoverWindow;
 import CC_PRJ.SSM.SharedMode;
 
 public class BallMover extends JPanel implements KeyListener{
-	private final static int BALL_DIAMETER = 10;
 	private static final long serialVersionUID = -4575223266375770758L;
+	public final static int DIAMETER = 10;
 	private Ball ball;
-	private int diameter;
+	
 	private int mode;
 
 	private boolean keyFlag = false;
 	Color color;
 
 	public BallMover(int mode) {
+		super();
 		this.ball = new Ball();
 		this.color = Color.magenta;
-		this.diameter = BALL_DIAMETER;
 		this.mode = mode;
 	}
 
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.setColor(color);
-		g.fillOval(0, 0, diameter, diameter);
+		g.fillOval(0, 0, DIAMETER, DIAMETER);
 	}
 
 	public void move(int time) {
@@ -40,10 +41,10 @@ public class BallMover extends JPanel implements KeyListener{
 		switch(mode){
 		case SharedMode.ABS_MODE:
 			System.out.println("[Move]Here is Absolute Consistency Mode!");
-			if (new_pos_x > 0 && new_pos_x + diameter < 400)
+			if (new_pos_x > 0 && new_pos_x + DIAMETER < BallMoverWindow.FRAME_WIDTH)
 				new_pos_x = alg.firstOrderPolynomial(time, getX(), 1);
 
-			if (new_pos_y < 0 && new_pos_y + diameter < 400)
+			if (new_pos_y < 0 && new_pos_y + DIAMETER < BallMoverWindow.FRAME_HEIGHT)
 				new_pos_y = alg.firstOrderPolynomial(time, getY(), 1);
 			break;
 		case SharedMode.FRQ_MODE:
@@ -57,20 +58,21 @@ public class BallMover extends JPanel implements KeyListener{
 			System.out.println("Before. Vel X: " +  ball.getVel_x() + " Vel Y: " +  ball.getVel_y());
 			System.out.println("Before. Acc X: " +  ball.getAcc_x() + " Acc Y: " +  ball.getAcc_y());
 			*/
-			new_pos_x = alg.secondOrderPolynomial(time, ball.getPos_x(), ball.getVel_x(), ball.getAcc_x());
-			new_pos_y = alg.secondOrderPolynomial(time, ball.getPos_y(), ball.getVel_y(), ball.getAcc_y());
+			new_pos_x = alg.firstOrderPolynomial(1, ball.getPos_x(), ball.getVel_x());
+			new_pos_y = alg.firstOrderPolynomial(1, ball.getPos_y(), ball.getVel_y());
 			
-			if (new_pos_x < 0 || new_pos_x + diameter > 400) {
+			if (new_pos_x < 0 || new_pos_x + DIAMETER * 2 > BallMoverWindow.FRAME_WIDTH) {
+				//System.out.println("Over Pace Pos X: " + new_pos_x);
 				ball.setVel_x( ball.getVel_x() * (-1) );
-				ball.setAcc_x( ball.getAcc_x() * (-1) );
-				new_pos_x = alg.secondOrderPolynomial(time, ball.getPos_x(), ball.getVel_x(), ball.getAcc_x());
+				//ball.setAcc_x( ball.getAcc_x() * (-1) );
+				new_pos_x = alg.firstOrderPolynomial(1, ball.getPos_x(), ball.getVel_x());
 			}
-				
 			
-			if (new_pos_y < 0 || new_pos_y + diameter > 400){
+			if (new_pos_y < 0 || new_pos_y + DIAMETER * 3 > BallMoverWindow.FRAME_HEIGHT){
+				//System.out.println("Over Pace Pos Y: " + new_pos_y);
 				ball.setVel_y( ball.getVel_y() * (-1) );
-				ball.setAcc_y( ball.getAcc_y() * (-1) );
-				new_pos_y = alg.secondOrderPolynomial(time, ball.getPos_y(), ball.getVel_y(), ball.getAcc_y());
+				//ball.setAcc_y( ball.getAcc_y() * (-1) );
+				new_pos_y = alg.firstOrderPolynomial(1, ball.getPos_y(), ball.getVel_y());
 			}
 			
 			//System.out.println("Cal. Pos X: " + new_pos_x + " Pos Y: " + new_pos_y);
@@ -78,19 +80,17 @@ public class BallMover extends JPanel implements KeyListener{
 		default:
 			break;
 		}
-		ball.setPos_x(new_pos_x);
-		ball.setPos_y(new_pos_y);
+		ball.setPos_x( new_pos_x );
+		ball.setPos_y( new_pos_y );
 	}
 
 	public void redraw() {
+		//System.out.println("====Redraw Info====");
 		//ball.printBallInfo();
-		setLocation(ball.getPos_x(), ball.getPos_y());
+		this.setLocation(ball.getPos_x(), ball.getPos_y());
+		this.repaint();
 	}
 	
-	public void redraw(int x, int y) {
-		setLocation(x, y);
-	}
-
 	public void keyPressed(KeyEvent e){
 		int keycode = e.getKeyCode();
 		System.out.println("Pressed: " + keycode);
@@ -104,7 +104,7 @@ public class BallMover extends JPanel implements KeyListener{
 					ball.setPos_y( ball.getPos_y() - 1 );
 				break;
 			case KeyEvent.VK_DOWN:
-				if(ball.getPos_y() + diameter <= getParent().getHeight())
+				if(ball.getPos_y() + DIAMETER <= getParent().getHeight())
 					ball.setPos_y( ball.getPos_y() + 1 );
 				break;
 			case KeyEvent.VK_LEFT:
@@ -112,7 +112,7 @@ public class BallMover extends JPanel implements KeyListener{
 					ball.setPos_x( ball.getPos_x() - 1 );
 				break;
 			case KeyEvent.VK_RIGHT:
-				if(ball.getPos_x() + diameter <= getParent().getWidth())
+				if(ball.getPos_x() + DIAMETER <= getParent().getWidth())
 					ball.setPos_x( ball.getPos_x() + 1 );
 				break;
 			}
@@ -132,6 +132,7 @@ public class BallMover extends JPanel implements KeyListener{
 			case KeyEvent.VK_RIGHT:
 				ball.setVel_x( ball.getVel_x() + 1 );
 				break;
+				/*
 			case KeyEvent.VK_HOME:
 				ball.setAcc_x( ball.getAcc_x() + 1 );
 				break;
@@ -144,6 +145,7 @@ public class BallMover extends JPanel implements KeyListener{
 			case KeyEvent.VK_PAGE_DOWN:
 				ball.setAcc_y( ball.getAcc_y() - 1 );
 				break;
+				*/
 			}
 			break;
 		default:

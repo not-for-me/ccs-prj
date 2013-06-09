@@ -2,7 +2,6 @@ package CC_PRJ.AnimateLogic;
 
 public class MovingBallAlgorithm {
 	
-	
 	public int firstOrderPolynomial(int time, int position, int vel) {
 		return vel * time + position;
 	}

@@ -5,6 +5,8 @@ public class Message {
 	public final static int UPDATE_USER = 2;
 	public final static int RCV_ACK = 3;
 	public final static int ALLOW_VIEW = 4;
+	public final static int DEFAULT_INFO = 5;
+	public final static int REQUIRE_INFO = 6;
 	
 	private int msgType;
 	private int userID;

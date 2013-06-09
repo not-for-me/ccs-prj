@@ -4,50 +4,59 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 
 import CC_PRJ.AnimateLogic.BallMover;
+import CC_PRJ.DataModel.Ball;
 import CC_PRJ.DataModel.Message;
 import CC_PRJ.DataModel.MessageParser;
 import CC_PRJ.DataModel.UserConnInfo;
+import CC_PRJ.Interface.Component.BallMoverWindow;
 import CC_PRJ.Interface.Server.ServerInterface;
 import CC_PRJ.SSM.SharedMode;
 
 public class DeadReckoning {
-	private int delayTime = 200;
-	private boolean newInfoFlag = false;
+	private int frameCount = 0;
 	
 	public DeadReckoning(){
 	}
 	
 	public void run(){
 		System.out.println("Start Dead Reckoning Mode!!!");
-		
-		SendThread sendThread = new SendThread();
-		sendThread.run();
 		final BallMover ball = new BallMover(SharedMode.DEAD_MODE);
+		ball.getBall().setPos_x((BallMoverWindow.FRAME_WIDTH - BallMover.DIAMETER) / 2);
+		ball.getBall().setPos_y((BallMoverWindow.FRAME_HEIGHT - BallMover.DIAMETER) / 2);
 		
 		while(true) {
-			try { Thread.sleep(delayTime); } catch (InterruptedException e) { System.out.println("Interrupted"); };
+			try { Thread.sleep(SharedMode.DELAY_TIME); } catch (InterruptedException e) { System.out.println("Interrupted"); };
 			
 			while(ServerInterface.getUserMSGQueue().getQueue().isEmpty() != true) {
 				String output = ServerInterface.getUserMSGQueue().dequeueString();
 				System.out.println("Dequeued msg: " + output);
 				MessageParser parser = new MessageParser(output);
 				Message msg = parser.parseMessage();
-
 				
 				switch(msg.getMsgType()) {
 				case Message.UPDATE_USER:
 					System.out.println("[[Update User Packet] is comming!!!");
 					ball.setBall(msg.getBall());
 					break;
+				case Message.REQUIRE_INFO:
+					System.out.println("[Require] is comming!!!");
+					PrintWriter out =  ServerInterface.getUserConnInfoList().get(msg.getUserID()).getOut();
+					String sendMSG = "5/";
+					sendMSG = sendMSG.concat(ball.getBall().getBallInfoInString());
+					System.out.println("Sending MSG: " + sendMSG);
+					out.println(sendMSG);
+					out.flush();
+					break;
 				default:
 					break;
 				}// Close Switch Statement
-				newInfoFlag = true;
+				//frameFlag = true;
 			}// Close While Statement (Queue Info)
-
 			ball.move(1);
-						
-			if(newInfoFlag == true) {
+			frameCount++;
+			
+			if(frameCount == SharedMode.FRAME_COUNT * SharedMode.UPDATE_THRESHOLD_SEC) {
+				System.out.println("Frame Count Full " + frameCount);
 				Iterator<UserConnInfo> iter = ServerInterface.getUserConnInfoList().iterator();
 				while( iter.hasNext() ) {
 					UserConnInfo userInfo = (UserConnInfo) iter.next();
@@ -59,9 +68,8 @@ public class DeadReckoning {
 					out.println(sendMSG);
 					out.flush();
 				}
-				newInfoFlag = false;
+				frameCount = 0;
 			}
-			
 			
 		}// Close While Statement
 	}// Close Run Method

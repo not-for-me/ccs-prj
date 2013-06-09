@@ -18,7 +18,7 @@ import CC_PRJ.Interface.Client.ClientInterface;
 import CC_PRJ.Interface.Component.BallMoverWindow;
 import CC_PRJ.SSM.SharedMode;
 
-public class FrequentUpdate {
+public class FrequentStateRegeneration {
 	private boolean lockOwnFlag = false;
 	private int lockTimer = 0;
 	private int port = 25000;
@@ -30,7 +30,7 @@ public class FrequentUpdate {
 	public static StringQueue getMSGQueue() {
 		return msgQueue;
 	}
-	public FrequentUpdate() {
+	public FrequentStateRegeneration() {
 	}
 
 	public void run(){
