@@ -1,4 +1,4 @@
-package CC_PRJ.AnimateLogic;
+package CC_PRJ.Interface.Component;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,7 +7,6 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 
 import CC_PRJ.DataModel.Ball;
-import CC_PRJ.Interface.Component.BallMoverWindow;
 import CC_PRJ.SSM.SharedMode;
 
 public class BallMover extends JPanel implements KeyListener{
@@ -34,7 +33,6 @@ public class BallMover extends JPanel implements KeyListener{
 	}
 
 	public void move(int time) {
-		MovingBallAlgorithm alg = new MovingBallAlgorithm();
 		int new_pos_x = ball.getPos_x();
 		int new_pos_y = ball.getPos_y();
 
@@ -42,10 +40,11 @@ public class BallMover extends JPanel implements KeyListener{
 		case SharedMode.ABS_MODE:
 			System.out.println("[Move]Here is Absolute Consistency Mode!");
 			if (new_pos_x > 0 && new_pos_x + DIAMETER < BallMoverWindow.FRAME_WIDTH)
-				new_pos_x = alg.firstOrderPolynomial(time, getX(), 1);
-
+				//new_pos_x = alg.firstOrderPolynomial(time, getX(), 1);
+				new_pos_x = getX() + 1;
 			if (new_pos_y < 0 && new_pos_y + DIAMETER < BallMoverWindow.FRAME_HEIGHT)
-				new_pos_y = alg.firstOrderPolynomial(time, getY(), 1);
+				//new_pos_y = alg.firstOrderPolynomial(time, getY(), 1);
+				new_pos_y = getY() + 1;
 			break;
 		case SharedMode.FRQ_MODE:
 			System.out.println("[Move]Here is Frequently State Update Mode!");
@@ -58,21 +57,26 @@ public class BallMover extends JPanel implements KeyListener{
 			System.out.println("Before. Vel X: " +  ball.getVel_x() + " Vel Y: " +  ball.getVel_y());
 			System.out.println("Before. Acc X: " +  ball.getAcc_x() + " Acc Y: " +  ball.getAcc_y());
 			*/
-			new_pos_x = alg.firstOrderPolynomial(1, ball.getPos_x(), ball.getVel_x());
-			new_pos_y = alg.firstOrderPolynomial(1, ball.getPos_y(), ball.getVel_y());
+			//new_pos_x = alg.firstOrderPolynomial(1, ball.getPos_x(), ball.getVel_x());
+			//new_pos_y = alg.firstOrderPolynomial(1, ball.getPos_y(), ball.getVel_y());
+			
+			new_pos_x = ball.getPos_x() + ball.getVel_x();
+			new_pos_y = ball.getPos_y() + ball.getVel_y();
 			
 			if (new_pos_x < 0 || new_pos_x + DIAMETER * 2 > BallMoverWindow.FRAME_WIDTH) {
 				//System.out.println("Over Pace Pos X: " + new_pos_x);
 				ball.setVel_x( ball.getVel_x() * (-1) );
 				//ball.setAcc_x( ball.getAcc_x() * (-1) );
-				new_pos_x = alg.firstOrderPolynomial(1, ball.getPos_x(), ball.getVel_x());
+				//new_pos_x = alg.firstOrderPolynomial(1, ball.getPos_x(), ball.getVel_x());
+				new_pos_x = ball.getPos_x() + ball.getVel_x();
 			}
 			
 			if (new_pos_y < 0 || new_pos_y + DIAMETER * 3 > BallMoverWindow.FRAME_HEIGHT){
 				//System.out.println("Over Pace Pos Y: " + new_pos_y);
 				ball.setVel_y( ball.getVel_y() * (-1) );
 				//ball.setAcc_y( ball.getAcc_y() * (-1) );
-				new_pos_y = alg.firstOrderPolynomial(1, ball.getPos_y(), ball.getVel_y());
+				//new_pos_y = alg.firstOrderPolynomial(1, ball.getPos_y(), ball.getVel_y());
+				new_pos_y = ball.getPos_y() + ball.getVel_y();
 			}
 			
 			//System.out.println("Cal. Pos X: " + new_pos_x + " Pos Y: " + new_pos_y);

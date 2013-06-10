@@ -7,7 +7,7 @@ import java.net.MulticastSocket;
 
 
 public class ReceiveThread extends Thread {
-	private int userPort = 25000;
+	//private int userPort = 25000;
 	private DatagramPacket dp; // 받는 것
 	private MulticastSocket ms; // 받는것
 	

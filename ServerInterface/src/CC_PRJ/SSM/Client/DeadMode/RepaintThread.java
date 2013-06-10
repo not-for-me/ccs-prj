@@ -1,15 +1,14 @@
 package CC_PRJ.SSM.Client.DeadMode;
 
-import CC_PRJ.AnimateLogic.BallMover;
-import CC_PRJ.DataModel.Ball;
+import CC_PRJ.Interface.Component.BallMover;
 import CC_PRJ.SSM.SharedMode;
 
 public class RepaintThread extends Thread{
-	private int convergenceFrame = 10;
+	//private int convergenceFrame = 10;
 
 	private BallMover ball;
-	private Ball pastInfo = new Ball();
-	private Ball newInfo = new Ball();
+	//private Ball pastInfo = new Ball();
+	//private Ball newInfo = new Ball();
 
 	public RepaintThread(BallMover ball) {
 		this.ball = ball;
@@ -26,11 +25,11 @@ public class RepaintThread extends Thread{
 			*/
 				ball.move(1);
 				ball.redraw();
-				pastInfo = ball.getBall();
+				//pastInfo = ball.getBall();
 			//}
 		}
 	}
-
+/*
 	private void convergenceState() {
 		System.out.println("Convergence!!!");
 		newInfo = ball.getBall();
@@ -102,4 +101,5 @@ public class RepaintThread extends Thread{
 		ball.getBall().setVel_x(newInfo.getVel_x());
 		ball.getBall().setVel_y(newInfo.getVel_y());
 	}
+	*/
 }

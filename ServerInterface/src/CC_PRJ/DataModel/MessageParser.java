@@ -22,7 +22,7 @@ public class MessageParser {
 		
 		msg.setMsgContent( str.nextToken() );
 		
-		//printParsingResult();
+		printParsingResult();
 		
 		if(msg.getMsgType() == Message.UPDATE_USER || msg.getMsgType() == Message.UPDATE_SERVER  || msg.getMsgType() == Message.DEFAULT_INFO) {
 			String locationStr =  msg.getMsgContent();

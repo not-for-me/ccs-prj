@@ -19,8 +19,8 @@ public class BottomComponent {
 	private JPanel bottomRightPanel;
 	private JLabel portLabel;
 	private JTextField portTextField;
-	private JLabel userNumLabel;
-	private JTextField userNumTextField;
+	private JLabel pktNumLabel;
+	private JTextField pktTextField;
 	private JButton startBtn;
 	
 	public BottomComponent() {
@@ -56,14 +56,14 @@ public class BottomComponent {
 		bottomLeft1Panel.add(portLabel);
 		bottomLeft1Panel.add(portTextField);
 		
-		userNumLabel = new JLabel("User :");
-		userNumLabel.setPreferredSize(new Dimension(40, 30));
-		userNumTextField = new JTextField("0");
-		userNumTextField.setHorizontalAlignment(JTextField.CENTER);
-		userNumTextField.setPreferredSize(new Dimension(60, 20));
+		pktNumLabel = new JLabel("Pkt :");
+		pktNumLabel.setPreferredSize(new Dimension(40, 30));
+		pktTextField = new JTextField("0");
+		pktTextField.setHorizontalAlignment(JTextField.CENTER);
+		pktTextField.setPreferredSize(new Dimension(60, 20));
 		
-		bottomLeft2Panel.add(userNumLabel);
-		bottomLeft2Panel.add(userNumTextField);
+		bottomLeft2Panel.add(pktNumLabel);
+		bottomLeft2Panel.add(pktTextField);
 		
 		bottomLeftPanel.add(bottomLeft1Panel);
 		bottomLeftPanel.add(bottomLeft2Panel);
@@ -83,8 +83,8 @@ public class BottomComponent {
 	public JTextField getPortTextField() {
 		return portTextField;
 	}
-	public JTextField getUserNumTextField() {
-		return userNumTextField;
+	public JTextField getPktNumTextField() {
+		return pktTextField;
 	}
 	public JButton getStartBtn() {
 		return startBtn;

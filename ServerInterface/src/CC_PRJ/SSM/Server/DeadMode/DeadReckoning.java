@@ -3,17 +3,18 @@ package CC_PRJ.SSM.Server.DeadMode;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
-import CC_PRJ.AnimateLogic.BallMover;
-import CC_PRJ.DataModel.Ball;
 import CC_PRJ.DataModel.Message;
 import CC_PRJ.DataModel.MessageParser;
 import CC_PRJ.DataModel.UserConnInfo;
+import CC_PRJ.Interface.Component.BallMover;
 import CC_PRJ.Interface.Component.BallMoverWindow;
+import CC_PRJ.Interface.Component.WindowManager;
 import CC_PRJ.Interface.Server.ServerInterface;
 import CC_PRJ.SSM.SharedMode;
 
 public class DeadReckoning {
 	private int frameCount = 0;
+	private int pktCount = 0;
 	
 	public DeadReckoning(){
 	}
@@ -37,6 +38,8 @@ public class DeadReckoning {
 				case Message.UPDATE_USER:
 					System.out.println("[[Update User Packet] is comming!!!");
 					ball.setBall(msg.getBall());
+					pktCount++;
+					WindowManager.getInstance().getBottom().getPktNumTextField().setText(Integer.toString(pktCount));
 					break;
 				case Message.REQUIRE_INFO:
 					System.out.println("[Require] is comming!!!");
@@ -46,6 +49,8 @@ public class DeadReckoning {
 					System.out.println("Sending MSG: " + sendMSG);
 					out.println(sendMSG);
 					out.flush();
+					pktCount++;pktCount++;
+					WindowManager.getInstance().getBottom().getPktNumTextField().setText(Integer.toString(pktCount));
 					break;
 				default:
 					break;
@@ -67,6 +72,8 @@ public class DeadReckoning {
 					System.out.println("Sending MSG: " + sendMSG);
 					out.println(sendMSG);
 					out.flush();
+					pktCount++;
+					WindowManager.getInstance().getBottom().getPktNumTextField().setText(Integer.toString(pktCount));
 				}
 				frameCount = 0;
 			}

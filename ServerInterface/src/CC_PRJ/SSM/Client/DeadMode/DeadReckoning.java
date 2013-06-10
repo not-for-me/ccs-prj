@@ -1,11 +1,10 @@
 package CC_PRJ.SSM.Client.DeadMode;
 
-import CC_PRJ.AnimateLogic.BallMover;
-import CC_PRJ.DataModel.Ball;
 import CC_PRJ.DataModel.Message;
 import CC_PRJ.DataModel.MessageParser;
 import CC_PRJ.DataModel.UserConnInfo;
 import CC_PRJ.Interface.Client.ClientInterface;
+import CC_PRJ.Interface.Component.BallMover;
 import CC_PRJ.Interface.Component.BallMoverWindow;
 import CC_PRJ.SSM.SharedMode;
 

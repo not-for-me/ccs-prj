@@ -73,10 +73,10 @@ public class WindowManager implements ActionListener{
 			public void changedUpdate(DocumentEvent arg0) {}
 			public void removeUpdate(DocumentEvent arg0) {}
 		});
-		bottom.getUserNumTextField().getDocument().addDocumentListener(new DocumentListener() {
+		bottom.getPktNumTextField().getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent arg0) {
-				ServerInterface.getInstance().setUserNum( Integer.parseInt( bottom.getUserNumTextField().getText() ) );
+				ServerInterface.getInstance().setUserNum( Integer.parseInt( bottom.getPktNumTextField().getText() ) );
 				System.out.println("User Number Input: " + ServerInterface.getInstance().getUserNum() );
 			}
 			public void changedUpdate(DocumentEvent arg0) {}
@@ -92,19 +92,19 @@ public class WindowManager implements ActionListener{
 			middle.getModeTextField().setText(ABSOLUTE_STRING);
 			SharedMode.getInstance().setSharedMode(SharedMode.ABS_MODE);
 			bottom.getPortTextField().setEnabled(true);
-			bottom.getUserNumTextField().setEnabled(true);
+			bottom.getPktNumTextField().setEnabled(true);
 		}
 		else if(source == top.getFrqBtn()) {
 			middle.getModeTextField().setText(FRQ_STRING);
 			SharedMode.getInstance().setSharedMode(SharedMode.FRQ_MODE);
 			bottom.getPortTextField().setEnabled(false);
-			bottom.getUserNumTextField().setEnabled(false);
+			bottom.getPktNumTextField().setEnabled(false);
 		}
 		else if(source == top.getDeadBtn()) {
 			middle.getModeTextField().setText(DEAD_STRING);
 			SharedMode.getInstance().setSharedMode(SharedMode.DEAD_MODE);
 			bottom.getPortTextField().setEnabled(true);
-			bottom.getUserNumTextField().setEnabled(true);
+			bottom.getPktNumTextField().setEnabled(true);
 		}
 		else if(source == bottom.getStartBtn()) {
 			if(bottom.getStartBtn().getText().compareTo("Listen") == 0) {

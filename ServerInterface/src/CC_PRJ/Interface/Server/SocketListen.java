@@ -1,4 +1,4 @@
-package CC_PRJ.Communication;
+package CC_PRJ.Interface.Server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,8 +10,6 @@ import java.net.Socket;
 
 import CC_PRJ.DataModel.UserConnInfo;
 import CC_PRJ.Interface.Component.WindowManager;
-import CC_PRJ.Interface.Server.ReceiveThread;
-import CC_PRJ.Interface.Server.ServerInterface;
 
 public class SocketListen extends Thread {
 	private int sockID = 0;

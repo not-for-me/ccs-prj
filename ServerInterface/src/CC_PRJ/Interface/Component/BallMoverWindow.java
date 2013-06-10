@@ -8,8 +8,8 @@ import javax.swing.JFrame;
 import CC_PRJ.Interface.Client.ClientInterface;
 
 public class BallMoverWindow {
-	public final static int FRAME_WIDTH = 500;
-	public final static int FRAME_HEIGHT = 500;
+	public final static int FRAME_WIDTH = 300;
+	public final static int FRAME_HEIGHT = 300;
 	final static String FRAME_TITLE = "Object Trajectory Window";
 	private JFrame frame;
 	

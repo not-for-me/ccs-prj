@@ -10,18 +10,18 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.Socket;
 
-import CC_PRJ.AnimateLogic.BallMover;
 import CC_PRJ.DataModel.Message;
 import CC_PRJ.DataModel.MessageParser;
 import CC_PRJ.DataModel.StringQueue;
 import CC_PRJ.Interface.Client.ClientInterface;
+import CC_PRJ.Interface.Component.BallMover;
 import CC_PRJ.Interface.Component.BallMoverWindow;
 import CC_PRJ.SSM.SharedMode;
 
 public class FrequentStateRegeneration {
 	private boolean lockOwnFlag = false;
 	private int lockTimer = 0;
-	private int port = 25000;
+	//private int port = 25000;
 	private int LOCK_MAX_TIMER = 10;
 	private DatagramPacket dp1; // 보내는 것
 	private MulticastSocket ms1; //보내는 것

@@ -3,16 +3,18 @@ package CC_PRJ.SSM.Server.AbsMode;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
-import CC_PRJ.AnimateLogic.BallMover;
 import CC_PRJ.DataModel.Ball;
 import CC_PRJ.DataModel.Message;
 import CC_PRJ.DataModel.MessageParser;
 import CC_PRJ.DataModel.UserConnInfo;
+import CC_PRJ.Interface.Component.BallMover;
 import CC_PRJ.Interface.Component.BallMoverWindow;
+import CC_PRJ.Interface.Component.WindowManager;
 import CC_PRJ.Interface.Server.ServerInterface;
 
 public class AbsoluteConsistency {
 	private Ball ballInformation;
+	private int pktCount = 0;
 
 	public AbsoluteConsistency(){
 		ballInformation = new Ball();
@@ -59,6 +61,8 @@ public class AbsoluteConsistency {
 						System.out.println("Sending MSG: " + sendMSG1);
 						out1.println(sendMSG1);
 						out1.flush();
+						pktCount++;pktCount++;
+						WindowManager.getInstance().getBottom().getPktNumTextField().setText(Integer.toString(pktCount));
 					}
 					else if(ServerInterface.getUserConnInfoList().size() > 1){
 						System.out.println("Many User!!!");
@@ -86,6 +90,8 @@ public class AbsoluteConsistency {
 					System.out.println("Sending MSG: " + sendMSG);
 					out.println(sendMSG);
 					out.flush();
+					pktCount++;pktCount++;
+					WindowManager.getInstance().getBottom().getPktNumTextField().setText(Integer.toString(pktCount));
 					break;
 				case Message.RCV_ACK:
 					System.out.println("[[ACK Packet] is comming!!!");
@@ -94,7 +100,8 @@ public class AbsoluteConsistency {
 						tempUserNum++;
 
 					System.out.println("Current RCV ACK NUM: " + tempUserNum);
-
+					pktCount++;pktCount++;
+					
 					if(tempUserNum == (ServerInterface.getUserConnInfoList().size() - 1)) {
 						System.out.println("RCV ACK NUM is fullfilled");
 						tempUserNum = 0;
@@ -107,7 +114,10 @@ public class AbsoluteConsistency {
 							System.out.println("Sending MSG: " + sendMSG1);
 							out1.println(sendMSG1);
 							out1.flush();
+							pktCount++;
 						}
+						pktCount++;
+						WindowManager.getInstance().getBottom().getPktNumTextField().setText(Integer.toString(pktCount));
 					}
 					break;
 				default:
