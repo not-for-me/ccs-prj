@@ -57,7 +57,7 @@ public class DeadReckoning {
 				}// Close Switch Statement
 				//frameFlag = true;
 			}// Close While Statement (Queue Info)
-			ball.move(1);
+			ball.move();
 			frameCount++;
 			
 			if(frameCount == SharedMode.FRAME_COUNT * SharedMode.UPDATE_THRESHOLD_SEC) {

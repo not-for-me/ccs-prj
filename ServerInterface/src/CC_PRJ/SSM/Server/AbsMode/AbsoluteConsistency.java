@@ -27,20 +27,6 @@ public class AbsoluteConsistency {
 
 		int tempUserNum = 0;
 
-		/*
-		Iterator<UserConnInfo> iter1 = ServerInterface.getUserConnInfoList().iterator();
-		while( iter1.hasNext() ) {
-			UserConnInfo userInfo = (UserConnInfo) iter1.next();
-
-			PrintWriter out = userInfo.getOut();
-			String sendMSG = "5/";
-			sendMSG = sendMSG.concat(ballInformation.getBallInfoInString());
-			System.out.println("Sending MSG: " + sendMSG);
-			out.println(sendMSG);
-			out.flush();
-		}
-		 */
-
 		while(true) {
 
 			if(ServerInterface.getUserMSGQueue().getQueue().isEmpty() != true) {

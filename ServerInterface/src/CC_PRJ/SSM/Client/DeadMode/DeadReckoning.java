@@ -52,8 +52,6 @@ public class DeadReckoning {
 				case Message.UPDATE_SERVER:
 					System.out.println("[[Update Server Packet] is comming!!!");
 					ball.setBall(msg.getBall());
-					//ball.redraw();
-					//ball.repaint();
 					break;
 				default:
 					break;

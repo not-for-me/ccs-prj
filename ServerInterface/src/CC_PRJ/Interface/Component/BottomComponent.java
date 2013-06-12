@@ -1,5 +1,9 @@
 package CC_PRJ.Interface.Component;
 
+/*
+ * 서버 화면의 하단부 컴포넌트
+ */
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;

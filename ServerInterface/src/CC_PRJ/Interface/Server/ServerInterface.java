@@ -1,5 +1,9 @@
 package CC_PRJ.Interface.Server;
 
+/*
+ * 서버 쪽 프로그램
+ */
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -10,7 +14,6 @@ import CC_PRJ.SSM.SharedMode;
 import CC_PRJ.SSM.Server.AbsMode.AbsoluteConsistency;
 import CC_PRJ.SSM.Server.FrqMode.FrequentStateRegenerate;
 import CC_PRJ.SSM.Server.DeadMode.DeadReckoning;
-
 
 public class ServerInterface {
 	private static ServerInterface instance = new ServerInterface();
@@ -84,7 +87,6 @@ public class ServerInterface {
 				
 				WindowManager.getInstance().getBottom().getStartBtn().setText("Start");
 				WindowManager.getInstance().getBottom().getStartBtn().setEnabled(false);
-				//while(ServerInterface.getInstance().getStartFlag() == FALSE) {}
 				AbsoluteConsistency absMode = new AbsoluteConsistency();
 				absMode.run();
 				break;
@@ -106,7 +108,6 @@ public class ServerInterface {
 				
 				WindowManager.getInstance().getBottom().getStartBtn().setText("Start");
 				WindowManager.getInstance().getBottom().getStartBtn().setEnabled(false);
-				//while(ServerInterface.getInstance().getStartFlag() == FALSE) {}
 				DeadReckoning deadMode = new DeadReckoning();
 				deadMode.run();
 				break;

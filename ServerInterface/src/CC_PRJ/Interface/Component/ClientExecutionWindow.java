@@ -1,5 +1,10 @@
 package CC_PRJ.Interface.Component;
 
+/*
+ * 클라이언트의 로그인 화면
+ */
+
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -147,12 +152,7 @@ public class ClientExecutionWindow implements ActionListener {
 			SharedMode.getInstance().setSharedMode(SharedMode.DEAD_MODE);
 		}
 		else if(source == logInBtn) {
-			//if(logInBtn.getText().compareTo("Start") == 0) {
-				
-			//}
-		//	else if(logInBtn.getText().compareTo("Log In") == 0) {
-				ClientInterface.getInstance().setLoginFlag(ClientInterface.TRUE);
-			//}
+			ClientInterface.getInstance().setLoginFlag(ClientInterface.TRUE);
 			connectionFrame.setVisible(false);
 		}
 		else if(source == cancelBtn) {

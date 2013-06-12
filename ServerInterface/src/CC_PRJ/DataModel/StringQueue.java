@@ -1,5 +1,9 @@
 package CC_PRJ.DataModel;
 
+/*
+ * 메시지를 받아서 처리하기 위한 큐 
+ */
+
 import java.util.LinkedList;
 import java.util.Queue;
 

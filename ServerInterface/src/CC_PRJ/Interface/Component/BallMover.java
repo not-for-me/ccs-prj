@@ -1,5 +1,9 @@
 package CC_PRJ.Interface.Component;
 
+/*
+ * 공의 움직임을 관리하는 클래스, 사용자의 입력에 따라 공의 움직임을 변경 함
+ */
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -32,7 +36,8 @@ public class BallMover extends JPanel implements KeyListener{
 		g.fillOval(0, 0, DIAMETER, DIAMETER);
 	}
 
-	public void move(int time) {
+	// 설정 모드에 따라 움짐임을 변경 함
+	public void move() {
 		int new_pos_x = ball.getPos_x();
 		int new_pos_y = ball.getPos_y();
 
@@ -40,46 +45,30 @@ public class BallMover extends JPanel implements KeyListener{
 		case SharedMode.ABS_MODE:
 			System.out.println("[Move]Here is Absolute Consistency Mode!");
 			if (new_pos_x > 0 && new_pos_x + DIAMETER < BallMoverWindow.FRAME_WIDTH)
-				//new_pos_x = alg.firstOrderPolynomial(time, getX(), 1);
 				new_pos_x = getX() + 1;
+			
 			if (new_pos_y < 0 && new_pos_y + DIAMETER < BallMoverWindow.FRAME_HEIGHT)
-				//new_pos_y = alg.firstOrderPolynomial(time, getY(), 1);
 				new_pos_y = getY() + 1;
 			break;
+			
 		case SharedMode.FRQ_MODE:
 			System.out.println("[Move]Here is Frequently State Update Mode!");
 			break;
-		case SharedMode.DEAD_MODE:
-			//System.out.println("[Move]Here is Dead Reckoning Mode!");
-			/*
-			System.out.println("Time Value: " + time);
-			System.out.println("Before. Pos X: " + new_pos_x + " Pos Y: " + new_pos_y);
-			System.out.println("Before. Vel X: " +  ball.getVel_x() + " Vel Y: " +  ball.getVel_y());
-			System.out.println("Before. Acc X: " +  ball.getAcc_x() + " Acc Y: " +  ball.getAcc_y());
-			*/
-			//new_pos_x = alg.firstOrderPolynomial(1, ball.getPos_x(), ball.getVel_x());
-			//new_pos_y = alg.firstOrderPolynomial(1, ball.getPos_y(), ball.getVel_y());
 			
+		case SharedMode.DEAD_MODE:
 			new_pos_x = ball.getPos_x() + ball.getVel_x();
 			new_pos_y = ball.getPos_y() + ball.getVel_y();
 			
 			if (new_pos_x < 0 || new_pos_x + DIAMETER * 2 > BallMoverWindow.FRAME_WIDTH) {
-				//System.out.println("Over Pace Pos X: " + new_pos_x);
 				ball.setVel_x( ball.getVel_x() * (-1) );
-				//ball.setAcc_x( ball.getAcc_x() * (-1) );
-				//new_pos_x = alg.firstOrderPolynomial(1, ball.getPos_x(), ball.getVel_x());
 				new_pos_x = ball.getPos_x() + ball.getVel_x();
 			}
 			
 			if (new_pos_y < 0 || new_pos_y + DIAMETER * 3 > BallMoverWindow.FRAME_HEIGHT){
-				//System.out.println("Over Pace Pos Y: " + new_pos_y);
 				ball.setVel_y( ball.getVel_y() * (-1) );
-				//ball.setAcc_y( ball.getAcc_y() * (-1) );
-				//new_pos_y = alg.firstOrderPolynomial(1, ball.getPos_y(), ball.getVel_y());
 				new_pos_y = ball.getPos_y() + ball.getVel_y();
 			}
 			
-			//System.out.println("Cal. Pos X: " + new_pos_x + " Pos Y: " + new_pos_y);
 			break;
 		default:
 			break;
@@ -88,13 +77,13 @@ public class BallMover extends JPanel implements KeyListener{
 		ball.setPos_y( new_pos_y );
 	}
 
+	//화면에 현재 공 위치 정보에 따라 공을 다시 그림
 	public void redraw() {
-		//System.out.println("====Redraw Info====");
-		//ball.printBallInfo();
 		this.setLocation(ball.getPos_x(), ball.getPos_y());
 		this.repaint();
 	}
 	
+	// 사용자의 새로운 키 입력 시 키 정보에 따른 값을 지정 함
 	public void keyPressed(KeyEvent e){
 		int keycode = e.getKeyCode();
 		System.out.println("Pressed: " + keycode);
@@ -121,7 +110,9 @@ public class BallMover extends JPanel implements KeyListener{
 				break;
 			}
 			break;
+			
 		case SharedMode.FRQ_MODE:
+			
 		case SharedMode.DEAD_MODE:
 			switch(keycode){
 			case KeyEvent.VK_UP:
@@ -136,20 +127,6 @@ public class BallMover extends JPanel implements KeyListener{
 			case KeyEvent.VK_RIGHT:
 				ball.setVel_x( ball.getVel_x() + 1 );
 				break;
-				/*
-			case KeyEvent.VK_HOME:
-				ball.setAcc_x( ball.getAcc_x() + 1 );
-				break;
-			case KeyEvent.VK_END:
-				ball.setAcc_x( ball.getAcc_x() - 1 );
-				break;
-			case KeyEvent.VK_PAGE_UP:
-				ball.setAcc_y( ball.getAcc_y() + 1 );
-				break;
-			case KeyEvent.VK_PAGE_DOWN:
-				ball.setAcc_y( ball.getAcc_y() - 1 );
-				break;
-				*/
 			}
 			break;
 		default:

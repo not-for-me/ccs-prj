@@ -1,5 +1,9 @@
 package CC_PRJ.Interface.Component;
 
+/*
+ * 서버의 화면 클래스
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;

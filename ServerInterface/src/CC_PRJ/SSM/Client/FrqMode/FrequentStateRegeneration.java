@@ -107,7 +107,7 @@ public class FrequentStateRegeneration {
 								sendMSG.getBytes().length,
 								InetAddress.getByName("239.2.3.4"),33333);
 						ms1 = new MulticastSocket();
-						ms1.setTimeToLive((byte)1);
+						ms1.setTimeToLive((byte)16);
 						ms1.send(dp1);
 						lockTimer++;
 						System.out.println("Msg Send and Lock Timer " + lockTimer);

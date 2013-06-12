@@ -1,5 +1,9 @@
 package CC_PRJ.Interface.Component;
 
+/*
+ * 공이 움직이는 화면 생성 클래스
+ */
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 

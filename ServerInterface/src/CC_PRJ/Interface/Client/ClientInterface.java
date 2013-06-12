@@ -1,5 +1,9 @@
 package CC_PRJ.Interface.Client;
 
+/*
+ * 클라이언트 시작 프로그램
+ */
+
 import CC_PRJ.DataModel.StringQueue;
 import CC_PRJ.DataModel.UserConnInfo;
 import CC_PRJ.Interface.Component.ClientExecutionWindow;
@@ -111,57 +115,22 @@ public class ClientInterface {
 	public void setIn(BufferedReader in) {
 		this.in = in;
 	}
-	/*
-	public int getSharedMode() {
-		return sharedMode;
-	}
-	public void setSharedMode(int sharedMode) {
-		this.sharedMode = sharedMode;
-	}
-	 */
 	
 	private void getDefaultInfo() {
 		try {
 			String input;
 			input = in.readLine();
-			//StringTokenizer str = new StringTokenizer(input, "/");
-			//userID = Integer.parseInt( str.nextToken() );
 			userID = Integer.parseInt( input );
 			System.out.println("My User Id: " + userID);
-			//sharedMode = Integer.parseInt( str.nextToken() );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	/*
-	private void start() {
-		//this.getDefaultInfo();
-		System.out.println("Received Shrared Stated Mode from Server: " + SharedMode.getInstance().getSharedMode());
-		switch(SharedMode.getInstance().getSharedMode()){
-		case SharedMode.ABS_MODE:
-			System.out.println("Here is Absolute Consistency Mode!");
-			ReceiveThread rcvThread = new ReceiveThread(in);
-			rcvThread.start();
-			AbsoluteConsistency absMode = new AbsoluteConsistency(this);
-			absMode.run();
-			break;
-		case SharedMode.FRQ_MODE:
-			System.out.println("Here is Frequently State Update Mode!");
-			FrequentUpdate frqMode = new FrequentUpdate();
-			frqMode.run();
-			break;
-		case SharedMode.DEAD_MODE:
-			System.out.println("Here is Dead Reckoning Mode!");
-			//DeadReckoning deadMode = new DeadReckoning();
-			break;
-		default:
-			break;
-		}
-	}
-	 */
 	public static void main(String[] args) {
 		ClientExecutionWindow.getInstance().drawWindow();
+		
+		// 화면을 띄우고, 사용자의 모드 입력에 따라 각 모드 객체를 생성하여 시작 함.
 
 		while(true){
 			if(SharedMode.getInstance().getSharedMode() != 0) {
@@ -171,7 +140,6 @@ public class ClientInterface {
 					System.out.println("Here is Absolute Consistency Mode!");
 
 					ClientInterface.getInstance().connect();
-					//ClientInterface.getInstance().start();
 					ClientInterface.getInstance().getDefaultInfo();
 					ReceiveThread rcvThread = new ReceiveThread(ClientInterface.getInstance().getIn());
 					rcvThread.start();
@@ -187,6 +155,7 @@ public class ClientInterface {
 					ClientInterface.getInstance().close();
 					System.exit(0);
 					break;
+					
 				case SharedMode.FRQ_MODE:
 					System.out.println("Here is Frequently State Update Mode!");
 					while(ClientInterface.getInstance().getLoginFlag() == FALSE) {}
@@ -194,11 +163,11 @@ public class ClientInterface {
 					frqMode.run();
 					System.exit(0);
 					break;
+					
 				case SharedMode.DEAD_MODE:
 					System.out.println("Here is Dead Reckoning Mode!!!");
 					
 					ClientInterface.getInstance().connect();
-					//ClientInterface.getInstance().start();
 					ClientInterface.getInstance().getDefaultInfo();
 					ReceiveThread rcv2Thread = new ReceiveThread(ClientInterface.getInstance().getIn());
 					rcv2Thread.start();

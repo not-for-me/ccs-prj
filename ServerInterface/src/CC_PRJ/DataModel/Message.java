@@ -1,5 +1,9 @@
 package CC_PRJ.DataModel;
 
+/*
+ * 서버와 클라이언트간 통신에 이용되는 메시지 클래스
+ */
+
 public class Message {
 	public final static int UPDATE_SERVER = 1;
 	public final static int UPDATE_USER = 2;

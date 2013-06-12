@@ -1,5 +1,9 @@
 package CC_PRJ.DataModel;
 
+/*
+ * 서버와 클라이어트 간의 전송된 메시지 객체를 파싱하기 위한 클래스 
+ */
+
 import java.util.StringTokenizer;
 
 public class MessageParser {
@@ -31,8 +35,6 @@ public class MessageParser {
 			msg.getBall().setPos_y( Integer.parseInt( locStr.nextToken() ) );
 			msg.getBall().setVel_x( Integer.parseInt( locStr.nextToken() ) );
 			msg.getBall().setVel_y( Integer.parseInt( locStr.nextToken() ) );
-			//msg.getBall().setAcc_x( Integer.parseInt( locStr.nextToken() ) );
-			//msg.getBall().setAcc_y( Integer.parseInt( locStr.nextToken() ) );
 			//msg.getBall().printBallInfo();
 		}
 		

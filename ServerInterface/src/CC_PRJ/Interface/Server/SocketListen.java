@@ -1,5 +1,10 @@
 package CC_PRJ.Interface.Server;
 
+/*
+ * 서버에서 사용자의 접속을 받기 위해 계속해서 기다리는 스레드
+ */
+
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -47,6 +52,5 @@ public class SocketListen extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//System.out.println("User Connection End\nTotal User Number: " + ServerInterface.getUserConnInfoList().size() );
 	}
 }
